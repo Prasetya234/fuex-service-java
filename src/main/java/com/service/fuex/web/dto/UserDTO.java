@@ -1,5 +1,6 @@
 package com.service.fuex.web.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.service.fuex.web.model.UserStatus;
 import com.service.fuex.web.model.UserType;
 
@@ -7,7 +8,6 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.Date;
 
 public class UserDTO {
 
@@ -16,8 +16,6 @@ public class UserDTO {
     @NotBlank(message = "CAN NOT BE EMPTY")
     @Size(max = 255, message = "MAXIMUM 255 CHARACTERS")
     private String username;
-
-    private Date createDate;
 
     @NotBlank(message = "CAN NOT BE EMPTY")
     @Size(max = 255, message = "MAXIMUM 255 CHARACTERS")
@@ -31,19 +29,21 @@ public class UserDTO {
     @Size(max = 255, message = "MAXIMUM 255 CHARACTERS")
     private int mobilePhoneNumber;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @NotBlank(message = "CAN NOT BE EMPTY")
     @Size(max = 255, message = "MAXIMUM 255 CHARACTERS")
     private String userStatus;
 
     private UserStatus userStatusId;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @NotBlank(message = "CAN NOT BE EMPTY")
     @Size(max = 255, message = "MAXIMUM 255 CHARACTERS")
     private String userType;
 
     private UserType userTypeId;
 
-    // SETTER 7 GETTER
+    // SETTER & GETTER
     public Long getUserId() {
         return userId;
     }
@@ -58,14 +58,6 @@ public class UserDTO {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public Date getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
     }
 
     public String getFullName() {

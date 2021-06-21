@@ -3,7 +3,6 @@ package com.service.fuex.web.model;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
-import java.util.Date;
 
 @Entity
 @Table(name="user")
@@ -12,8 +11,6 @@ public class User {
     private Long userId;
 
     private String username;
-
-    private Date createDate;
 
     private String fullName;
 
@@ -60,16 +57,6 @@ public class User {
         this.username = username;
     }
 
-    @Column(name = "create_date")
-    @CreationTimestamp
-    public Date getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
-    }
-
     @Column(name = "full_name", nullable = false)
     public String getFullName() {
         return fullName;
@@ -107,7 +94,7 @@ public class User {
     }
 
     @OneToOne(fetch = FetchType.LAZY, cascade =  CascadeType.MERGE)
-    @JoinColumn(name = "user_status_id", nullable = false)
+    @JoinColumn(name = "user_status_id", nullable = true)
     public UserStatus getUserStatusId() {
         return userStatusId;
     }
@@ -126,7 +113,7 @@ public class User {
     }
 
     @OneToOne(fetch = FetchType.LAZY, cascade =  CascadeType.MERGE)
-    @JoinColumn(name = "user_type_id", nullable = false)
+    @JoinColumn(name = "user_type_id", nullable = true)
     public UserType getUserTypeId() {
         return userTypeId;
     }
@@ -140,7 +127,6 @@ public class User {
         return "User{" +
                 "userId=" + userId +
                 ", username='" + username + '\'' +
-                ", createDate=" + createDate +
                 ", fullName='" + fullName + '\'' +
                 ", email='" + email + '\'' +
                 ", mobilePhoneNumber=" + mobilePhoneNumber +
