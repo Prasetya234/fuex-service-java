@@ -25,7 +25,7 @@ public class ValidateImpl implements ValidateService{
         if (checkingEmail != null) {
             throw new ResourceNotFoundExceotion("EMAIL ALREADY EXIST");
         }
-        User checkingMobilePhoneNumber = userRepository.findByMobilePhoneNumber(userRequire.getMobilePhoneNumber());
+        User checkingMobilePhoneNumber = userRepository.findByMobilePhoneNumber(Integer.parseInt(userRequire.getMobilePhoneNumber()));
         if (checkingMobilePhoneNumber != null) {
             throw new ResourceNotFoundExceotion("NUMBER PHONE ALREADY EXIST");
         }

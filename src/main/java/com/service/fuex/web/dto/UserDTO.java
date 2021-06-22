@@ -25,9 +25,8 @@ public class UserDTO {
     @Size(max = 255, message = "MAXIMUM 255 CHARACTERS")
     private String email;
 
-    @NotNull(message = "CAN NOT BE EMPTY")
-    @Size(max = 255, message = "MAXIMUM 255 CHARACTERS")
-    private int mobilePhoneNumber;
+    @NotNull(message = "CAN NOT BE EMPETY")
+    private String mobilePhoneNumber;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @NotBlank(message = "CAN NOT BE EMPTY")
@@ -76,11 +75,11 @@ public class UserDTO {
         this.email = email;
     }
 
-    public int getMobilePhoneNumber() {
+    public String getMobilePhoneNumber() {
         return mobilePhoneNumber;
     }
 
-    public void setMobilePhoneNumber(int mobilePhoneNumber) {
+    public void setMobilePhoneNumber(String mobilePhoneNumber) {
         this.mobilePhoneNumber = mobilePhoneNumber;
     }
 

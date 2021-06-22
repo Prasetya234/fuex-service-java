@@ -1,13 +1,10 @@
 package com.service.fuex.web.model;
 
-import org.hibernate.annotations.CreationTimestamp;
-
 import javax.persistence.*;
 
 @Entity
-@Table(name="user")
+@Table(name = "user")
 public class User {
-
     private Long userId;
 
     private String username;
@@ -16,7 +13,7 @@ public class User {
 
     private String email;
 
-    private int mobilePhoneNumber;
+    private String mobilePhoneNumber;
 
     private String userStatus;
 
@@ -24,12 +21,12 @@ public class User {
 
     private String userType;
 
-    private UserType userTypeId;
+    private  UserType userTypeId;
 
     public User() {
     }
 
-    public User(String username, String fullName, String email, int mobilePhoneNumber, String userStatus, String userType) {
+    public User(String username, String fullName, String email, String mobilePhoneNumber, String userStatus, String userType) {
         this.username = username;
         this.fullName = fullName;
         this.email = email;
@@ -76,15 +73,15 @@ public class User {
     }
 
     @Column(name = "mobile_phone_number", nullable = false)
-    public int getMobilePhoneNumber() {
+    public String getMobilePhoneNumber() {
         return mobilePhoneNumber;
     }
 
-    public void setMobilePhoneNumber(int mobilePhoneNumber) {
+    public void setMobilePhoneNumber(String mobilePhoneNumber) {
         this.mobilePhoneNumber = mobilePhoneNumber;
     }
 
-    @Column(name = "user_status", nullable = false)
+    @Column(name = "user_status_implement", nullable = false)
     public String getUserStatus() {
         return userStatus;
     }
@@ -93,7 +90,7 @@ public class User {
         this.userStatus = userStatus;
     }
 
-    @OneToOne(fetch = FetchType.LAZY, cascade =  CascadeType.MERGE)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "user_status_id", nullable = true)
     public UserStatus getUserStatusId() {
         return userStatusId;
@@ -103,7 +100,7 @@ public class User {
         this.userStatusId = userStatusId;
     }
 
-    @Column(name = "user_type", nullable = false)
+    @Column(name = "user_type_implement", nullable = false)
     public String getUserType() {
         return userType;
     }
@@ -112,8 +109,8 @@ public class User {
         this.userType = userType;
     }
 
-    @OneToOne(fetch = FetchType.LAZY, cascade =  CascadeType.MERGE)
-    @JoinColumn(name = "user_type_id", nullable = true)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @JoinColumn(name = "user_type_id", nullable = false)
     public UserType getUserTypeId() {
         return userTypeId;
     }
