@@ -10,6 +10,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 @RestController
@@ -33,5 +34,29 @@ public class Authentication {
         UserDTO response = modelMapper.map(user, UserDTO.class);
 
         return commonResponseGenerator.successResponse(response);
+    }
+
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public CommonResponse<UserDTO> login(HttpServletRequest request) throws ResourceNotFoundExceotion{
+//        User userDTO = modelMapper.map(request, User.class);
+//
+//        User user = (User) userService.login((HttpServletRequest) userDTO);
+//
+//        UserDTO response = modelMapper.map(user, UserDTO.class);
+//
+//        return commonResponseGenerator.successResponse(response);
+        return commonResponseGenerator.successResponse(userService.login(request));
+    }
+
+    @RequestMapping(value = "/checking-avalibility-user", method = RequestMethod.GET)
+    public CommonResponse<UserDTO> getUserByMobilePhoneNumber(HttpServletRequest request) throws ResourceNotFoundExceotion{
+//        User userDTO = modelMapper.map(request, User.class);
+//
+//        User user = (User) userService.getUserByMobilePhoneNumber((HttpServletRequest) userDTO);
+//
+//        UserDTO response = modelMapper.map(user, UserDTO.class);
+//
+//        return commonResponseGenerator.successResponse(response);
+        return commonResponseGenerator.successResponse(userService.getUserByMobilePhoneNumber(request));
     }
 }

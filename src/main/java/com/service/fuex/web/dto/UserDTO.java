@@ -25,7 +25,8 @@ public class UserDTO {
     @Size(max = 255, message = "MAXIMUM 255 CHARACTERS")
     private String email;
 
-    @NotNull(message = "CAN NOT BE EMPETY")
+    @NotBlank(message = "CAN NOT BE EMPETY")
+    @Size(max = 12, message = "MAXIMUM 12 CHARACTERS")
     private String mobilePhoneNumber;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)

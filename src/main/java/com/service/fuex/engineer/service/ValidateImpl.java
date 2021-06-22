@@ -8,6 +8,8 @@ import com.service.fuex.web.repository.UserTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
+
 @Service
 public class ValidateImpl implements ValidateService{
     @Autowired
@@ -25,7 +27,7 @@ public class ValidateImpl implements ValidateService{
         if (checkingEmail != null) {
             throw new ResourceNotFoundExceotion("EMAIL ALREADY EXIST");
         }
-        User checkingMobilePhoneNumber = userRepository.findByMobilePhoneNumber(Integer.parseInt(userRequire.getMobilePhoneNumber()));
+        User checkingMobilePhoneNumber = userRepository.findByMobilePhoneNumber(userRequire.getMobilePhoneNumber());
         if (checkingMobilePhoneNumber != null) {
             throw new ResourceNotFoundExceotion("NUMBER PHONE ALREADY EXIST");
         }
@@ -40,5 +42,42 @@ public class ValidateImpl implements ValidateService{
                     return userRequire;
                 }).orElseThrow(() -> new ResourceNotFoundExceotion("USER TYPE ID NOT FOUND"));
         return userRepository.save(userRequire);
+    }
+
+
+    @Override
+    public Object login(HttpServletRequest request) throws ResourceNotFoundExceotion {
+        String authorizationMobilePhoneNumber = request.getHeader("mobilePhoneNumber");
+
+        String mobilePhoneNumber;
+
+        if(authorizationMobilePhoneNumber != null){
+            mobilePhoneNumber = authorizationMobilePhoneNumber;
+
+            User checkingMobilePhoneNumber = userRepository.findByMobilePhoneNumber(mobilePhoneNumber);
+            if (checkingMobilePhoneNumber == null){
+                throw new ResourceNotFoundExceotion("NUMBER PHONE NOT FOUND");
+            }
+            return checkingMobilePhoneNumber;
+        }
+        throw new ResourceNotFoundExceotion("NOT VALIDATED");
+    }
+
+    @Override
+    public Object getUserByMobilePhoneNumber(HttpServletRequest request) throws ResourceNotFoundExceotion {
+        String getUserByMobilePhoneNumberFromHeader = request.getHeader("mobilePhoneNumber");
+
+        String mobilePhoneNumber;
+
+        if (getUserByMobilePhoneNumberFromHeader != null){
+            mobilePhoneNumber = getUserByMobilePhoneNumberFromHeader;
+
+            User checkingMobilePhoneNumber = userRepository.findByMobilePhoneNumber(mobilePhoneNumber);
+            if (checkingMobilePhoneNumber == null){
+                throw new ResourceNotFoundExceotion("NUMBER PHONE NOT FOUND");
+            }
+            return checkingMobilePhoneNumber;
+        }
+        throw new ResourceNotFoundExceotion("NOT VALIDATED");
     }
 }
