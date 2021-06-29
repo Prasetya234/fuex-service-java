@@ -1,8 +1,10 @@
 package com.service.fuex.engineer.controller;
 
 import com.service.fuex.engineer.service.ValidateImpl;
+import com.service.fuex.web.dto.TemporaryOtpDTO;
 import com.service.fuex.web.dto.UserDTO;
 import com.service.fuex.web.exception.ResourceNotFoundExceotion;
+import com.service.fuex.web.model.TemporaryOtp;
 import com.service.fuex.web.model.User;
 import com.service.fuex.web.response.CommonResponse;
 import com.service.fuex.web.response.CommonResponseGenerator;
@@ -23,13 +25,13 @@ public class Authentication {
     private CommonResponseGenerator commonResponseGenerator;
 
     @Autowired
-    private ValidateImpl userService;
+    private ValidateImpl validateService;
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public CommonResponse<UserDTO> registerUser(@RequestBody @Valid UserDTO userDTORequire) throws ResourceNotFoundExceotion {
         User userDTO = modelMapper.map(userDTORequire, User.class);
 
-        User user = userService.register(userDTO);
+        User user = validateService.register(userDTO);
 
         UserDTO response = modelMapper.map(user, UserDTO.class);
 
@@ -37,7 +39,7 @@ public class Authentication {
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public CommonResponse<UserDTO> login(HttpServletRequest request) throws ResourceNotFoundExceotion{
+    public CommonResponse<UserDTO> login(HttpServletRequest request, TemporaryOtp createTemporaryOtp) throws ResourceNotFoundExceotion{
 //        User userDTO = modelMapper.map(request, User.class);
 //
 //        User user = (User) userService.login((HttpServletRequest) userDTO);
@@ -45,11 +47,11 @@ public class Authentication {
 //        UserDTO response = modelMapper.map(user, UserDTO.class);
 //
 //        return commonResponseGenerator.successResponse(response);
-        return commonResponseGenerator.successResponse(userService.login(request));
+        return commonResponseGenerator.successResponse(validateService.login(request,createTemporaryOtp));
     }
 
     @RequestMapping(value = "/checking-avalibility-user", method = RequestMethod.GET)
-    public CommonResponse<UserDTO> getUserByMobilePhoneNumber(HttpServletRequest request) throws ResourceNotFoundExceotion{
+    public CommonResponse<UserDTO> getUserByEmail(HttpServletRequest request) throws ResourceNotFoundExceotion{
 //        User userDTO = modelMapper.map(request, User.class);
 //
 //        User user = (User) userService.getUserByMobilePhoneNumber((HttpServletRequest) userDTO);
@@ -57,6 +59,11 @@ public class Authentication {
 //        UserDTO response = modelMapper.map(user, UserDTO.class);
 //
 //        return commonResponseGenerator.successResponse(response);
-        return commonResponseGenerator.successResponse(userService.getUserByMobilePhoneNumber(request));
+        return commonResponseGenerator.successResponse(validateService.getUserByEmail(request));
+    }
+
+    @RequestMapping(value = "/login/checking-otp", method = RequestMethod.GET)
+    public CommonResponse<TemporaryOtpDTO> checkingOtp(@RequestParam(name = "otpNumber") String otpNumber,@RequestParam(name = "email") String email) throws ResourceNotFoundExceotion{
+        return commonResponseGenerator.successResponse(validateService.checkingOtp(otpNumber,email));
     }
 }

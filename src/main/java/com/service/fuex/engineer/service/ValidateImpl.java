@@ -1,14 +1,18 @@
 package com.service.fuex.engineer.service;
 
 import com.service.fuex.web.exception.ResourceNotFoundExceotion;
+import com.service.fuex.web.model.TemporaryOtp;
 import com.service.fuex.web.model.User;
+import com.service.fuex.web.repository.TemporaryOtpRepository;
 import com.service.fuex.web.repository.UserRepository;
 import com.service.fuex.web.repository.UserStatusRepository;
 import com.service.fuex.web.repository.UserTypeRepository;
+import org.aspectj.bridge.IMessageContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Random;
 
 @Service
 public class ValidateImpl implements ValidateService{
@@ -20,6 +24,11 @@ public class ValidateImpl implements ValidateService{
 
     @Autowired
     private UserStatusRepository userStatusRepository;
+
+    @Autowired
+    private TemporaryOtpRepository temporaryOtpRepository;
+
+//    private Object TemporaryOtp;
 
     @Override
     public User register(User userRequire) throws ResourceNotFoundExceotion {
@@ -46,38 +55,54 @@ public class ValidateImpl implements ValidateService{
 
 
     @Override
-    public Object login(HttpServletRequest request) throws ResourceNotFoundExceotion {
-        String authorizationMobilePhoneNumber = request.getHeader("mobilePhoneNumber");
+    public Object login(HttpServletRequest request,TemporaryOtp createTemporaryOtp) throws ResourceNotFoundExceotion {
+        String authorizationEmail = request.getHeader("email");
 
-        String mobilePhoneNumber;
+        String email;
 
-        if(authorizationMobilePhoneNumber != null){
-            mobilePhoneNumber = authorizationMobilePhoneNumber;
+        if(authorizationEmail != null){
+            email = authorizationEmail;
 
-            User checkingMobilePhoneNumber = userRepository.findByMobilePhoneNumber(mobilePhoneNumber);
-            if (checkingMobilePhoneNumber == null){
-                throw new ResourceNotFoundExceotion("NUMBER PHONE NOT FOUND");
+            User checkingEmail = userRepository.findByEmail(email);
+                if (checkingEmail == null){
+                    throw new ResourceNotFoundExceotion("EMAIL NOT FOUND");
+                }
+                Random random = new Random();
+                int otpNumber = 100000 + random.nextInt(900000);
+                createTemporaryOtp.setOtpNumber(String.valueOf(otpNumber));
+                createTemporaryOtp.setEmail(checkingEmail.getEmail());
+                createTemporaryOtp.setVerified(false);
+                TemporaryOtp save = temporaryOtpRepository.save(createTemporaryOtp);
+                return save;
             }
-            return checkingMobilePhoneNumber;
+        throw new ResourceNotFoundExceotion("NOT VALIDATED");
+    }
+
+    @Override
+    public Object getUserByEmail(HttpServletRequest request) throws ResourceNotFoundExceotion {
+        String getUserByEmail = request.getHeader("email");
+
+        String email;
+
+        if (getUserByEmail != null){
+            email = getUserByEmail;
+
+            User checkingEmail = userRepository.findByEmail(email);
+            if (checkingEmail == null){
+                throw new ResourceNotFoundExceotion("EMAIL NOT FOUND");
+            }
+            return checkingEmail;
         }
         throw new ResourceNotFoundExceotion("NOT VALIDATED");
     }
 
     @Override
-    public Object getUserByMobilePhoneNumber(HttpServletRequest request) throws ResourceNotFoundExceotion {
-        String getUserByMobilePhoneNumberFromHeader = request.getHeader("mobilePhoneNumber");
-
-        String mobilePhoneNumber;
-
-        if (getUserByMobilePhoneNumberFromHeader != null){
-            mobilePhoneNumber = getUserByMobilePhoneNumberFromHeader;
-
-            User checkingMobilePhoneNumber = userRepository.findByMobilePhoneNumber(mobilePhoneNumber);
-            if (checkingMobilePhoneNumber == null){
-                throw new ResourceNotFoundExceotion("NUMBER PHONE NOT FOUND");
-            }
-            return checkingMobilePhoneNumber;
+    public TemporaryOtp checkingOtp(String otpNumber, String email) throws ResourceNotFoundExceotion {
+        TemporaryOtp checkingOtp = temporaryOtpRepository.checkingOtp(otpNumber,email);
+        if (checkingOtp == null) {
+            throw new ResourceNotFoundExceotion("KODE OTP or EMAIL NOT FOUND");
         }
-        throw new ResourceNotFoundExceotion("NOT VALIDATED");
+        checkingOtp.setVerified(true);
+        return temporaryOtpRepository.save(checkingOtp);
     }
 }
