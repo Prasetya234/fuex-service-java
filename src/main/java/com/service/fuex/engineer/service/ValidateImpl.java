@@ -1,5 +1,6 @@
 package com.service.fuex.engineer.service;
 
+import com.service.fuex.engineer.email.EmailConfig;
 import com.service.fuex.web.exception.ResourceNotFoundExceotion;
 import com.service.fuex.web.model.TemporaryOtp;
 import com.service.fuex.web.model.User;
@@ -28,7 +29,8 @@ public class ValidateImpl implements ValidateService{
     @Autowired
     private TemporaryOtpRepository temporaryOtpRepository;
 
-//    private Object TemporaryOtp;
+    @Autowired
+    private EmailConfig emailConfig;
 
     @Override
     public User register(User userRequire) throws ResourceNotFoundExceotion {
@@ -63,17 +65,22 @@ public class ValidateImpl implements ValidateService{
         if(authorizationEmail != null){
             email = authorizationEmail;
 
-            User checkingEmail = userRepository.findByEmail(email);
+                User checkingEmail = userRepository.findByEmail(email);
                 if (checkingEmail == null){
-                    throw new ResourceNotFoundExceotion("EMAIL NOT FOUND");
+                    throw new ResourceNotFoundExceotion("EMAIL NOT AVAILABLE");
                 }
                 Random random = new Random();
                 int otpNumber = 100000 + random.nextInt(900000);
                 createTemporaryOtp.setOtpNumber(String.valueOf(otpNumber));
                 createTemporaryOtp.setEmail(checkingEmail.getEmail());
                 createTemporaryOtp.setVerified(false);
-                TemporaryOtp save = temporaryOtpRepository.save(createTemporaryOtp);
-                return save;
+                var checkingUserOtp = temporaryOtpRepository.findByEmail(email);
+                if (checkingUserOtp != null) {
+                    temporaryOtpRepository.deleteById(checkingUserOtp.getOtpId());
+                    emailConfig.sendEmail(checkingEmail.getEmail());
+                    return temporaryOtpRepository.save(createTemporaryOtp);
+                }
+                return temporaryOtpRepository.save(createTemporaryOtp);
             }
         throw new ResourceNotFoundExceotion("NOT VALIDATED");
     }
