@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import java.util.Properties;
 
 @Component
-public class EmailConfig {
+public class EmailRegister {
     @Autowired
     private JavaMailSender mailSender;
 
@@ -20,7 +20,7 @@ public class EmailConfig {
     @Value("${spring.mail.password}")
     private String PASSWORD_SENDER;
 
-    public void sendEmail(String emailTo) throws ResourceNotFoundExceotion{
+    public void sendEmail(String emailTo) throws ResourceNotFoundExceotion {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
         mailSender.setHost("smtp.gmail.com");
         mailSender.setPort(587);
@@ -39,10 +39,9 @@ public class EmailConfig {
 
         message.setFrom(from);
         message.setTo(emailTo);
-        message.setSubject("Kode OTP Fuex Service ✔");
-        message.setText("This is a kode otp : ");
+        message.setSubject("Fuex Service ✔");
+        message.setText("Your account has been sign up on fuex");
 
         mailSender.send(message);
     }
-
 }

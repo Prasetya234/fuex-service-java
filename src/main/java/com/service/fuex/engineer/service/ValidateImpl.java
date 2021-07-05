@@ -1,6 +1,7 @@
 package com.service.fuex.engineer.service;
 
 import com.service.fuex.engineer.email.EmailConfig;
+import com.service.fuex.engineer.email.EmailRegister;
 import com.service.fuex.web.exception.ResourceNotFoundExceotion;
 import com.service.fuex.web.model.TemporaryOtp;
 import com.service.fuex.web.model.User;
@@ -30,6 +31,9 @@ public class ValidateImpl implements ValidateService{
     private TemporaryOtpRepository temporaryOtpRepository;
 
     @Autowired
+    private EmailRegister emailRegister;
+
+    @Autowired
     private EmailConfig emailConfig;
 
     @Override
@@ -52,6 +56,7 @@ public class ValidateImpl implements ValidateService{
                     userRequire.setUserTypeId(userType);
                     return userRequire;
                 }).orElseThrow(() -> new ResourceNotFoundExceotion("USER TYPE ID NOT FOUND"));
+        emailRegister.sendEmail(userRequire.getEmail());
         return userRepository.save(userRequire);
     }
 
