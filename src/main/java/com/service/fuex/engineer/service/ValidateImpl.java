@@ -80,9 +80,9 @@ public class ValidateImpl implements ValidateService{
                 createTemporaryOtp.setEmail(checkingEmail.getEmail());
                 createTemporaryOtp.setVerified(false);
                 var checkingUserOtp = temporaryOtpRepository.findByEmail(email);
+            emailConfig.sendEmail(checkingEmail.getEmail());
                 if (checkingUserOtp != null) {
                     temporaryOtpRepository.deleteById(checkingUserOtp.getOtpId());
-                    emailConfig.sendEmail(checkingEmail.getEmail());
                     return temporaryOtpRepository.save(createTemporaryOtp);
                 }
                 return temporaryOtpRepository.save(createTemporaryOtp);
