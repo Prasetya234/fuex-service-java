@@ -23,7 +23,7 @@ public class EmailConfig {
     public void sendEmail(String emailTo) throws ResourceNotFoundExceotion{
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
         mailSender.setHost("smtp.gmail.com");
-        mailSender.setPort(465);
+        mailSender.setPort(587);
         mailSender.setUsername(EMAIL_SENDER);
         mailSender.setPassword(PASSWORD_SENDER);
 
