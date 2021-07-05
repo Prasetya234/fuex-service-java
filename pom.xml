@@ -44,6 +44,12 @@
 			<artifactId>h2</artifactId>
 			<scope>runtime</scope>
 		</dependency>
+		<!-- PostgreSQL used in Staging and Production environment, e.g. on Heroku -->
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>${postgresql.version}</version>
+		</dependency>
 		<!--Mapping DTO-->
 		<dependency>
 			<groupId>org.modelmapper</groupId>
