@@ -51,15 +51,8 @@ public class Authentication {
     }
 
     @RequestMapping(value = "/checking-avalibility-user", method = RequestMethod.GET)
-    public CommonResponse<UserDTO> getUserByEmail(HttpServletRequest request) throws ResourceNotFoundExceotion{
-//        User userDTO = modelMapper.map(request, User.class);
-//
-//        User user = (User) userService.getUserByMobilePhoneNumber((HttpServletRequest) userDTO);
-//
-//        UserDTO response = modelMapper.map(user, UserDTO.class);
-//
-//        return commonResponseGenerator.successResponse(response);
-        return commonResponseGenerator.successResponse(validateService.getUserByEmail(request));
+    public Object getUserByEmail(HttpServletRequest request) throws ResourceNotFoundExceotion{
+        return validateService.getUserByEmail(request);
     }
 
     @RequestMapping(value = "/login/checking-otp", method = RequestMethod.GET)

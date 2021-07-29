@@ -3,15 +3,15 @@ package com.service.fuex.web.response;
 public class CommonResponse<T> {
     private String status;
     private String message;
-    private T contet;
+    private T content;
 
     public CommonResponse() {
     }
 
-    public CommonResponse(String status, String message, T contet) {
+    public CommonResponse(String status, String message, T content) {
         this.status = status;
         this.message = message;
-        this.contet = contet;
+        this.content = content;
     }
 
     public String getStatus() {
@@ -30,11 +30,11 @@ public class CommonResponse<T> {
         this.message = message;
     }
 
-    public T getContet() {
-        return contet;
+    public T getContent() {
+        return content;
     }
 
-    public void setContet(T contet) {
-        this.contet = contet;
+    public void setContent(T content) {
+        this.content = content;
     }
 }

@@ -9,11 +9,13 @@ import com.service.fuex.web.repository.TemporaryOtpRepository;
 import com.service.fuex.web.repository.UserRepository;
 import com.service.fuex.web.repository.UserStatusRepository;
 import com.service.fuex.web.repository.UserTypeRepository;
+import com.service.fuex.web.response.CommonResponseGenerator;
 import org.aspectj.bridge.IMessageContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.Random;
 
 @Service
@@ -35,6 +37,9 @@ public class ValidateImpl implements ValidateService{
 
     @Autowired
     private EmailConfig emailConfig;
+
+    @Autowired
+    private CommonResponseGenerator commonResponseGenerator;
 
     @Override
     public User register(User userRequire) throws ResourceNotFoundExceotion {
@@ -60,7 +65,6 @@ public class ValidateImpl implements ValidateService{
         return userRepository.save(userRequire);
     }
 
-
     @Override
     public Object login(HttpServletRequest request,TemporaryOtp createTemporaryOtp) throws ResourceNotFoundExceotion {
         String authorizationEmail = request.getHeader("email");
@@ -80,7 +84,7 @@ public class ValidateImpl implements ValidateService{
                 createTemporaryOtp.setEmail(checkingEmail.getEmail());
                 createTemporaryOtp.setVerified(false);
                 var checkingUserOtp = temporaryOtpRepository.findByEmail(email);
-            emailConfig.sendEmail(checkingEmail.getEmail());
+                emailConfig.sendEmail(checkingEmail.getEmail());
                 if (checkingUserOtp != null) {
                     temporaryOtpRepository.deleteById(checkingUserOtp.getOtpId());
                     return temporaryOtpRepository.save(createTemporaryOtp);
@@ -101,9 +105,9 @@ public class ValidateImpl implements ValidateService{
 
             User checkingEmail = userRepository.findByEmail(email);
             if (checkingEmail == null){
-                throw new ResourceNotFoundExceotion("EMAIL NOT FOUND");
+                return commonResponseGenerator.responseEmailNotFound(new Date());
             }
-            return checkingEmail;
+            return commonResponseGenerator.successResponse(checkingEmail);
         }
         throw new ResourceNotFoundExceotion("NOT VALIDATED");
     }
