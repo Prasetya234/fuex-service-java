@@ -28,17 +28,7 @@ public class UserDTO {
     @Size(max = 12, message = "MAXIMUM 12 CHARACTERS")
     private String mobilePhoneNumber;
 
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @NotBlank(message = "CAN NOT BE EMPTY")
-    @Size(max = 255, message = "MAXIMUM 255 CHARACTERS")
-    private String userStatus;
-
     private UserStatus userStatusId;
-
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @NotBlank(message = "CAN NOT BE EMPTY")
-    @Size(max = 255, message = "MAXIMUM 255 CHARACTERS")
-    private String userType;
 
     private UserType userTypeId;
 
@@ -83,28 +73,12 @@ public class UserDTO {
         this.mobilePhoneNumber = mobilePhoneNumber;
     }
 
-    public String getUserStatus() {
-        return userStatus;
-    }
-
-    public void setUserStatus(String userStatus) {
-        this.userStatus = userStatus;
-    }
-
     public UserStatus getUserStatusId() {
         return userStatusId;
     }
 
     public void setUserStatusId(UserStatus userStatusId) {
         this.userStatusId = userStatusId;
-    }
-
-    public String getUserType() {
-        return userType;
-    }
-
-    public void setUserType(String userType) {
-        this.userType = userType;
     }
 
     public UserType getUserTypeId() {

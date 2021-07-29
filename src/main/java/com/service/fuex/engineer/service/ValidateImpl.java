@@ -10,7 +10,6 @@ import com.service.fuex.web.repository.UserRepository;
 import com.service.fuex.web.repository.UserStatusRepository;
 import com.service.fuex.web.repository.UserTypeRepository;
 import com.service.fuex.web.response.CommonResponseGenerator;
-import org.aspectj.bridge.IMessageContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -42,7 +41,7 @@ public class ValidateImpl implements ValidateService{
     private CommonResponseGenerator commonResponseGenerator;
 
     @Override
-    public User register(User userRequire) throws ResourceNotFoundExceotion {
+    public Object register(User userRequire) throws ResourceNotFoundExceotion {
         User checkingEmail = userRepository.findByEmail(userRequire.getEmail());
         if (checkingEmail != null) {
             throw new ResourceNotFoundExceotion("EMAIL ALREADY EXIST");
@@ -51,12 +50,12 @@ public class ValidateImpl implements ValidateService{
         if (checkingMobilePhoneNumber != null) {
             throw new ResourceNotFoundExceotion("NUMBER PHONE ALREADY EXIST");
         }
-        userStatusRepository.findById(Long.valueOf(userRequire.getUserStatus()))
+        userStatusRepository.findById(1L)
                 .map(userStatus -> {
                     userRequire.setUserStatusId(userStatus);
                     return userRequire;
                 }).orElseThrow(() -> new ResourceNotFoundExceotion("USER STATUS ID NOT FOUND"));
-        userTypeRepository.findById(Long.valueOf(userRequire.getUserType()))
+        userTypeRepository.findById(1L)
                 .map(userType -> {
                     userRequire.setUserTypeId(userType);
                     return userRequire;
@@ -102,10 +101,9 @@ public class ValidateImpl implements ValidateService{
 
         if (getUserByEmail != null){
             email = getUserByEmail;
-
             User checkingEmail = userRepository.findByEmail(email);
             if (checkingEmail == null){
-                return commonResponseGenerator.responseEmailNotFound(new Date());
+                return commonResponseGenerator.responseEmailNotFound("EMAIL NOT FOUND", new Date());
             }
             return commonResponseGenerator.successResponse(checkingEmail);
         }

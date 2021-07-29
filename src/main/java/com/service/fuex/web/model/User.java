@@ -17,24 +17,18 @@ public class User {
 
     private String mobilePhoneNumber;
 
-    private String userStatus;
-
     private UserStatus userStatusId;
-
-    private String userType;
 
     private  UserType userTypeId;
 
     public User() {
     }
 
-    public User(String username, String fullName, String email, String mobilePhoneNumber, String userStatus, String userType) {
+    public User(String username, String fullName, String email, String mobilePhoneNumber) {
         this.username = username;
         this.fullName = fullName;
         this.email = email;
         this.mobilePhoneNumber = mobilePhoneNumber;
-        this.userStatus = userStatus;
-        this.userType = userType;
     }
 
     @Id
@@ -83,15 +77,6 @@ public class User {
         this.mobilePhoneNumber = mobilePhoneNumber;
     }
 
-    @Column(name = "user_status_implement", nullable = false)
-    public String getUserStatus() {
-        return userStatus;
-    }
-
-    public void setUserStatus(String userStatus) {
-        this.userStatus = userStatus;
-    }
-
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "user_status_id", nullable = true)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
@@ -101,15 +86,6 @@ public class User {
 
     public void setUserStatusId(UserStatus userStatusId) {
         this.userStatusId = userStatusId;
-    }
-
-    @Column(name = "user_type_implement", nullable = false)
-    public String getUserType() {
-        return userType;
-    }
-
-    public void setUserType(String userType) {
-        this.userType = userType;
     }
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)

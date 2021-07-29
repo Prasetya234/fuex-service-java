@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.Date;
 
 @RestController
 public class Authentication {
@@ -28,25 +29,19 @@ public class Authentication {
     private ValidateImpl validateService;
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public CommonResponse<UserDTO> registerUser(@RequestBody @Valid UserDTO userDTORequire) throws ResourceNotFoundExceotion {
-        User userDTO = modelMapper.map(userDTORequire, User.class);
-
-        User user = validateService.register(userDTO);
-
-        UserDTO response = modelMapper.map(user, UserDTO.class);
-
-        return commonResponseGenerator.successResponse(response);
+    public CommonResponse<UserDTO> registerUser(@RequestBody @Valid UserDTO userDTORequire){
+        try {
+            User userDTO = modelMapper.map(userDTORequire, User.class);
+            Object user = validateService.register(userDTO);
+            UserDTO response = modelMapper.map(user, UserDTO.class);
+            return commonResponseGenerator.successResponse(response);
+        } catch (Exception e) {
+            return commonResponseGenerator.failResponse("Error", String.valueOf(e));
+        }
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public CommonResponse<UserDTO> login(HttpServletRequest request, TemporaryOtp createTemporaryOtp) throws ResourceNotFoundExceotion{
-//        User userDTO = modelMapper.map(request, User.class);
-//
-//        User user = (User) userService.login((HttpServletRequest) userDTO);
-//
-//        UserDTO response = modelMapper.map(user, UserDTO.class);
-//
-//        return commonResponseGenerator.successResponse(response);
         return commonResponseGenerator.successResponse(validateService.login(request,createTemporaryOtp));
     }
 
