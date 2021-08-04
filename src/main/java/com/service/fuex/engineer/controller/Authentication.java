@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.Date;
 
 @RestController
 public class Authentication {
@@ -29,14 +28,11 @@ public class Authentication {
     private ValidateImpl validateService;
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public CommonResponse<UserDTO> registerUser(@RequestBody @Valid UserDTO userDTORequire){
+    public CommonResponse<User> registerUser(@RequestBody @Valid User userDTORequire){
         try {
-            User userDTO = modelMapper.map(userDTORequire, User.class);
-            Object user = validateService.register(userDTO);
-            UserDTO response = modelMapper.map(user, UserDTO.class);
-            return commonResponseGenerator.successResponse(response);
+            return validateService.register(userDTORequire);
         } catch (Exception e) {
-            return commonResponseGenerator.failResponse("Error", String.valueOf(e));
+            return commonResponseGenerator.failResponse("Error" , e.getMessage());
         }
     }
 

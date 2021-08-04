@@ -9,6 +9,7 @@ import com.service.fuex.web.repository.TemporaryOtpRepository;
 import com.service.fuex.web.repository.UserRepository;
 import com.service.fuex.web.repository.UserStatusRepository;
 import com.service.fuex.web.repository.UserTypeRepository;
+import com.service.fuex.web.response.CommonResponse;
 import com.service.fuex.web.response.CommonResponseGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,27 +42,31 @@ public class ValidateImpl implements ValidateService{
     private CommonResponseGenerator commonResponseGenerator;
 
     @Override
-    public Object register(User userRequire) throws ResourceNotFoundExceotion {
+    public CommonResponse<User> register(User userRequire){
         User checkingEmail = userRepository.findByEmail(userRequire.getEmail());
         if (checkingEmail != null) {
-            throw new ResourceNotFoundExceotion("EMAIL ALREADY EXIST");
+            return commonResponseGenerator.failResponse( "Error" ,"EMAIL ALREADY EXIST");
         }
         User checkingMobilePhoneNumber = userRepository.findByMobilePhoneNumber(userRequire.getMobilePhoneNumber());
         if (checkingMobilePhoneNumber != null) {
-            throw new ResourceNotFoundExceotion("NUMBER PHONE ALREADY EXIST");
+            return commonResponseGenerator.failResponse("Error","NUMBER PHONE ALREADY EXIST");
         }
-        userStatusRepository.findById(1L)
-                .map(userStatus -> {
-                    userRequire.setUserStatusId(userStatus);
-                    return userRequire;
-                }).orElseThrow(() -> new ResourceNotFoundExceotion("USER STATUS ID NOT FOUND"));
-        userTypeRepository.findById(1L)
-                .map(userType -> {
-                    userRequire.setUserTypeId(userType);
-                    return userRequire;
-                }).orElseThrow(() -> new ResourceNotFoundExceotion("USER TYPE ID NOT FOUND"));
-        emailRegister.sendEmail(userRequire.getEmail());
-        return userRepository.save(userRequire);
+        var idn =  userStatusRepository.findById(1L).get();
+        if (idn == null) {
+            return commonResponseGenerator.failResponse("Error", "USER STATUS ID NOT FOUND");
+        }
+        userRequire.setUserStatusId(idn);
+        var hihi = userTypeRepository.findById(1L).get();
+        if (hihi == null) {
+            return  commonResponseGenerator.failResponse("Error", "USER TYPE ID NOT FOUND");
+        }
+        userRequire.setUserTypeId(hihi);
+        try {
+            emailRegister.sendEmail(userRequire.getEmail());
+        } catch (Exception e) {
+            return commonResponseGenerator.failResponse("Error", e.getMessage());
+        }
+        return commonResponseGenerator.successResponse(userRepository.save(userRequire));
     }
 
     @Override
