@@ -19,13 +19,13 @@
         <td bgcolor="#eaeaea" style="padding: 40px 30px 40px 30px;">
             <p>Dear ${username},</p>
             <p>Your account has been sign up on fuex</p><br/>
-            <p>Thanks</p>
             <p><a href="https://fuex-service.herokuapp.com/user/access/${id}">Accounts Verify To Login</a></p>
+            <p>Thank you</p>
         </td>
     </tr>
     <tr>
         <td bgcolor="#777777" style="padding: 30px 30px 30px 30px; align-items: center;">
-            <p>@Company of Excellent Semarang</p>
+            <p>@Excellent Semarang</p>
         </td>
     </tr>
 </table>

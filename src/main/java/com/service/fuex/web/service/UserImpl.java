@@ -44,9 +44,10 @@ public class UserImpl implements  UserService{
         var user = userRepository.findById(userId).get();
         var checkingStatusUser = userStatusRepository.getById(2L);
         user.setUserStatusId(checkingStatusUser);
-        userRepository.save(user);
+        var somuch = userRepository.save(user);
+        Map<String, Object> templates = new HashMap<>();
+        templates.put("username",  somuch.getUsername());
         Template t = config.getTemplate("template-access.ftl");
-        String html = FreeMarkerTemplateUtils.processTemplateIntoString(t, null);
-        return html;
+        return FreeMarkerTemplateUtils.processTemplateIntoString(t, templates);
     }
 }

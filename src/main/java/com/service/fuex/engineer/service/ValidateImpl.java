@@ -102,7 +102,7 @@ public class ValidateImpl implements ValidateService{
             var end = temporaryOtpRepository.save(createTemporaryOtp);
             Map<String, Object> model = new HashMap<>();
             model.put("username",  checkingEmail.getUsername());
-            model.put("otp", checkingUserOtp.getOtpNumber());
+            model.put("otp", end.getOtpNumber());
             emailConfig.sendEmail(checkingEmail.getEmail(), model);
             return commonResponseGenerator.successResponse(end);
             }

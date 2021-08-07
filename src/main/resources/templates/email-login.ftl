@@ -20,12 +20,12 @@
             <p>User ${username},</p>
             <p>Thank you for joining us</p><br/>
             <p>here is your access code: </p>
-            <p>${otp}</p>
+            <p><a href="http://localhost:8080/">${otp}</a></p>
         </td>
     </tr>
     <tr>
         <td bgcolor="#777777" style="padding: 30px 30px 30px 30px; align-items: center;">
-            <p>@Company of Excellent Semarang</p>
+            <p>@Excellent Semarang</p>
         </td>
     </tr>
 </table>
