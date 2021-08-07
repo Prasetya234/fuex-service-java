@@ -4,14 +4,14 @@ import com.service.fuex.web.dto.UserDTO;
 import com.service.fuex.web.response.CommonResponse;
 import com.service.fuex.web.response.CommonResponseGenerator;
 import com.service.fuex.web.service.UserImpl;
-import com.service.fuex.web.service.UserService;
+import freemarker.template.TemplateException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/user")
@@ -30,7 +30,7 @@ public class UserController {
         try {
             return commonResponseGenerator.successResponse(userService.getAll());
         } catch (Exception e) {
-            return commonResponseGenerator.failResponse("Error", e.getMessage());
+            return commonResponseGenerator.failResponse(e.getMessage());
         }
     }
 
@@ -39,7 +39,12 @@ public class UserController {
         try {
             return commonResponseGenerator.successResponse(userService.deleteUserById(userId));
         } catch (Exception e) {
-            return   commonResponseGenerator.failResponse("Error", e.getMessage());
+            return   commonResponseGenerator.failResponse(e.getMessage());
         }
+    }
+
+    @GetMapping("/access/{id}")
+    public String getUser(@PathVariable(value = "id") Long userId) throws TemplateException, IOException {
+            return userService.getUserById(userId);
     }
 }

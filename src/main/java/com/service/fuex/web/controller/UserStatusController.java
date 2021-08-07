@@ -51,7 +51,7 @@ public class UserStatusController {
         try {
             return commonResponseGenerator.successResponse(userStatusService.updateUserStatusId(userStatusId, userStatusDetails));
         } catch (Exception e) {
-            return commonResponseGenerator.failResponse("Error", e.getMessage());
+            return commonResponseGenerator.failResponse( e.getMessage());
         }
     }
     @DeleteMapping("/{id}")
@@ -59,7 +59,7 @@ public class UserStatusController {
         try {
             return commonResponseGenerator.successResponse(userStatusService.deleteUserStatusById(userStatusId));
         } catch (Exception e) {
-            return   commonResponseGenerator.failResponse("Error", e.getMessage());
+            return   commonResponseGenerator.failResponse(e.getMessage());
         }
     }
 }

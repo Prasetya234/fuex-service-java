@@ -11,11 +11,15 @@ import com.service.fuex.web.repository.UserStatusRepository;
 import com.service.fuex.web.repository.UserTypeRepository;
 import com.service.fuex.web.response.CommonResponse;
 import com.service.fuex.web.response.CommonResponseGenerator;
+import freemarker.template.TemplateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 @Service
@@ -45,70 +49,74 @@ public class ValidateImpl implements ValidateService{
     public CommonResponse<User> register(User userRequire){
         User checkingEmail = userRepository.findByEmail(userRequire.getEmail());
         if (checkingEmail != null) {
-            return commonResponseGenerator.failResponse( "Error" ,"EMAIL ALREADY EXIST");
+            return commonResponseGenerator.failResponse( "EMAIL ALREADY EXIST");
         }
         User checkingMobilePhoneNumber = userRepository.findByMobilePhoneNumber(userRequire.getMobilePhoneNumber());
         if (checkingMobilePhoneNumber != null) {
-            return commonResponseGenerator.failResponse("Error","NUMBER PHONE ALREADY EXIST");
+            return commonResponseGenerator.failResponse("NUMBER PHONE ALREADY EXIST");
         }
         var idn =  userStatusRepository.findById(1L).get();
         if (idn == null) {
-            return commonResponseGenerator.failResponse("Error", "USER STATUS ID NOT FOUND");
+            return commonResponseGenerator.failResponse("USER STATUS ID NOT FOUND");
         }
         userRequire.setUserStatusId(idn);
         var hihi = userTypeRepository.findById(1L).get();
         if (hihi == null) {
-            return  commonResponseGenerator.failResponse("Error", "USER TYPE ID NOT FOUND");
+            return  commonResponseGenerator.failResponse("USER TYPE ID NOT FOUND");
         }
         userRequire.setUserTypeId(hihi);
+        var rambow = userRepository.save(userRequire);
         try {
-            emailRegister.sendEmail(userRequire.getEmail());
+            Map<String, Object> model = new HashMap<>();
+            model.put("username",  userRequire.getUsername());
+            model.put("id", rambow.getUserId());
+            emailRegister.sendEmail(userRequire.getEmail(), model);
         } catch (Exception e) {
-            return commonResponseGenerator.failResponse("Error", e.getMessage());
+            return commonResponseGenerator.failResponse( e.getMessage());
         }
-        return commonResponseGenerator.successResponse(userRepository.save(userRequire));
+        return commonResponseGenerator.successResponse(rambow);
     }
 
     @Override
-    public Object login(HttpServletRequest request,TemporaryOtp createTemporaryOtp) throws ResourceNotFoundExceotion {
+    public CommonResponse<TemporaryOtp> login(HttpServletRequest request, TemporaryOtp createTemporaryOtp) throws TemplateException, MessagingException, IOException {
         String authorizationEmail = request.getHeader("email");
-
         String email;
-
         if(authorizationEmail != null){
             email = authorizationEmail;
-
                 User checkingEmail = userRepository.findByEmail(email);
                 if (checkingEmail == null){
-                    throw new ResourceNotFoundExceotion("EMAIL NOT AVAILABLE");
+                    return  commonResponseGenerator.failResponse( "YOUR EMAIL IS NOT REGISTERED");
                 }
-                Random random = new Random();
-                int otpNumber = 100000 + random.nextInt(900000);
-                createTemporaryOtp.setOtpNumber(String.valueOf(otpNumber));
-                createTemporaryOtp.setEmail(checkingEmail.getEmail());
-                createTemporaryOtp.setVerified(false);
-                var checkingUserOtp = temporaryOtpRepository.findByEmail(email);
-                emailConfig.sendEmail(checkingEmail.getEmail());
-                if (checkingUserOtp != null) {
-                    temporaryOtpRepository.deleteById(checkingUserOtp.getOtpId());
-                    return temporaryOtpRepository.save(createTemporaryOtp);
+                if (checkingEmail.getUserStatusId().getUserStatusId().equals(1L)) {
+                    return commonResponseGenerator.failResponse( "YOUR ACCOUNT IS NOT ACTIVE");
                 }
-                return temporaryOtpRepository.save(createTemporaryOtp);
+            Random random = new Random();
+            int otpNumber = 100000 + random.nextInt(900000);
+            createTemporaryOtp.setOtpNumber(String.valueOf(otpNumber));
+            createTemporaryOtp.setEmail(checkingEmail.getEmail());
+            createTemporaryOtp.setVerified(false);
+            var checkingUserOtp = temporaryOtpRepository.findByEmail(email);
+            if (checkingUserOtp != null) {
+                temporaryOtpRepository.deleteById(checkingUserOtp.getOtpId());
             }
-        throw new ResourceNotFoundExceotion("NOT VALIDATED");
+            var end = temporaryOtpRepository.save(createTemporaryOtp);
+            Map<String, Object> model = new HashMap<>();
+            model.put("username",  checkingEmail.getUsername());
+            model.put("otp", checkingUserOtp.getOtpNumber());
+            emailConfig.sendEmail(checkingEmail.getEmail(), model);
+            return commonResponseGenerator.successResponse(end);
+            }
+        return  commonResponseGenerator.failResponse("YOU MUST ACCESS ACCORDING TO THE PROCEDURE");
     }
-
     @Override
     public Object getUserByEmail(HttpServletRequest request) throws ResourceNotFoundExceotion {
         String getUserByEmail = request.getHeader("email");
-
         String email;
-
         if (getUserByEmail != null){
             email = getUserByEmail;
             User checkingEmail = userRepository.findByEmail(email);
             if (checkingEmail == null){
-                return commonResponseGenerator.responseEmailNotFound("EMAIL NOT FOUND", new Date());
+                return commonResponseGenerator.responseEmailNotFound("EMAIL NOT FOUND");
             }
             return commonResponseGenerator.successResponse(checkingEmail);
         }

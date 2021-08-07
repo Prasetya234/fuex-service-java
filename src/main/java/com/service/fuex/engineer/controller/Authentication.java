@@ -2,18 +2,20 @@ package com.service.fuex.engineer.controller;
 
 import com.service.fuex.engineer.service.ValidateImpl;
 import com.service.fuex.web.dto.TemporaryOtpDTO;
-import com.service.fuex.web.dto.UserDTO;
 import com.service.fuex.web.exception.ResourceNotFoundExceotion;
 import com.service.fuex.web.model.TemporaryOtp;
 import com.service.fuex.web.model.User;
 import com.service.fuex.web.response.CommonResponse;
 import com.service.fuex.web.response.CommonResponseGenerator;
+import freemarker.template.TemplateException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.io.IOException;
 
 @RestController
 public class Authentication {
@@ -32,13 +34,17 @@ public class Authentication {
         try {
             return validateService.register(userDTORequire);
         } catch (Exception e) {
-            return commonResponseGenerator.failResponse("Error" , e.getMessage());
+            return commonResponseGenerator.failResponse(e.getMessage());
         }
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public CommonResponse<UserDTO> login(HttpServletRequest request, TemporaryOtp createTemporaryOtp) throws ResourceNotFoundExceotion{
-        return commonResponseGenerator.successResponse(validateService.login(request,createTemporaryOtp));
+    public CommonResponse<TemporaryOtp> login(HttpServletRequest request, TemporaryOtp createTemporaryOtp) throws TemplateException, MessagingException, IOException {
+        try {
+            return validateService.login(request, createTemporaryOtp);
+        } catch (Exception e) {
+            return commonResponseGenerator.failResponse(e.getMessage());
+        }
     }
 
     @RequestMapping(value = "/checking-avalibility-user", method = RequestMethod.GET)
