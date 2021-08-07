@@ -48,7 +48,7 @@ public class Authentication {
     }
 
     @RequestMapping(value = "/checking-avalibility-user", method = RequestMethod.GET)
-    public Object getUserByEmail(HttpServletRequest request) throws ResourceNotFoundExceotion{
+    public Object getUserByEmail(HttpServletRequest request) {
         return validateService.getUserByEmail(request);
     }
 

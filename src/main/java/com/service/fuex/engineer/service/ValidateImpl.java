@@ -109,7 +109,7 @@ public class ValidateImpl implements ValidateService{
         return  commonResponseGenerator.failResponse("YOU MUST ACCESS ACCORDING TO THE PROCEDURE");
     }
     @Override
-    public Object getUserByEmail(HttpServletRequest request) throws ResourceNotFoundExceotion {
+    public Object getUserByEmail(HttpServletRequest request) {
         String getUserByEmail = request.getHeader("email");
         String email;
         if (getUserByEmail != null){
@@ -120,7 +120,7 @@ public class ValidateImpl implements ValidateService{
             }
             return commonResponseGenerator.successResponse(checkingEmail);
         }
-        throw new ResourceNotFoundExceotion("NOT VALIDATED");
+        return commonResponseGenerator.failResponse("NOT VALIDATED");
     }
 
     @Override

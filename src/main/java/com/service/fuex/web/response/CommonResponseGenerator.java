@@ -17,7 +17,7 @@ public class CommonResponseGenerator {
     public <T> CommonResponse<T> responseEmailNotFound(String content) {
         CommonResponse commonResponse = new CommonResponse<>();
         commonResponse.setStatus("200");
-        commonResponse.setMessage("SUCCESS");
+        commonResponse.setMessage("ERROR");
         commonResponse.setContent(content);
 
         return commonResponse;
