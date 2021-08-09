@@ -91,7 +91,7 @@ public class ValidateImpl implements ValidateService{
                     return commonResponseGenerator.failResponse( "YOUR ACCOUNT IS NOT ACTIVE");
                 }
             Random random = new Random();
-            int otpNumber = 100000 + random.nextInt(900000);
+            int otpNumber = random.nextInt(1_000_000);
             createTemporaryOtp.setOtpNumber(String.valueOf(otpNumber));
             createTemporaryOtp.setEmail(checkingEmail.getEmail());
             createTemporaryOtp.setVerified(false);

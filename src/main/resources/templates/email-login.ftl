@@ -18,9 +18,9 @@
     <tr>
         <td bgcolor="#eaeaea" style="padding: 40px 30px 40px 30px;">
             <p>User ${username},</p>
-            <p>Thank you for joining us</p><br/>
+            <p>Thank$ you for joining us</p><br/>
             <p>here is your access code: </p>
-            <p><a href="http://localhost:8080/">${otp}</a></p>
+            <p><a href="http://localhost:8080/home">${otp}</a></p>
         </td>
     </tr>
     <tr>
