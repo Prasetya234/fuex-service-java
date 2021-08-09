@@ -50,7 +50,7 @@ public class EmailRegister {
             String from = EMAIL_SENDER;
             helper.setTo(emailTo);
             helper.setText(html, true);
-            helper.setSubject("Fuex Service");
+            helper.setSubject("Account Verify Fuex Service");
             helper.setFrom(from);
             mailSender.send(message);
     }
