@@ -34,22 +34,26 @@ public class Authentication {
         try {
             return validateService.register(userDTORequire);
         } catch (Exception e) {
-            return commonResponseGenerator.failResponse(e.getMessage());
+            return commonResponseGenerator.failResponse(e.getMessage() + "anjay");
         }
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public CommonResponse<TemporaryOtp> login(HttpServletRequest request, TemporaryOtp createTemporaryOtp) throws TemplateException, MessagingException, IOException {
+    public Object login(HttpServletRequest request) throws TemplateException, MessagingException, IOException {
         try {
-            return validateService.login(request, createTemporaryOtp);
+            return validateService.login(request);
         } catch (Exception e) {
             return commonResponseGenerator.failResponse(e.getMessage());
         }
     }
 
     @RequestMapping(value = "/checking-avalibility-user", method = RequestMethod.GET)
-    public Object getUserByEmail(HttpServletRequest request) {
-        return validateService.getUserByEmail(request);
+    public Object getUserByEmail(HttpServletRequest request) throws TemplateException, MessagingException, IOException {
+        try {
+            return validateService.getUserByEmail(request);
+        } catch (Exception e) {
+            return commonResponseGenerator.failResponse(e.getMessage());
+        }
     }
 
     @RequestMapping(value = "/login/checking-otp", method = RequestMethod.GET)

@@ -1,8 +1,12 @@
 package com.service.fuex.web.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jdk.jfr.Timestamp;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Table(name = "useres")
@@ -17,18 +21,17 @@ public class User {
 
     private String mobilePhoneNumber;
 
-    private UserStatus userStatusId;
-
     private  UserType userTypeId;
 
     public User() {
     }
 
-    public User(String username, String fullName, String email, String mobilePhoneNumber) {
+    public User(String username, String fullName, String email, String mobilePhoneNumber, UserType userTypeId) {
         this.username = username;
         this.fullName = fullName;
         this.email = email;
         this.mobilePhoneNumber = mobilePhoneNumber;
+        this.userTypeId = userTypeId;
     }
 
     @Id
@@ -78,17 +81,6 @@ public class User {
     }
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-    @JoinColumn(name = "user_status_id", nullable = true)
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    public UserStatus getUserStatusId() {
-        return userStatusId;
-    }
-
-    public void setUserStatusId(UserStatus userStatusId) {
-        this.userStatusId = userStatusId;
-    }
-
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "user_type_id", nullable = false)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     public UserType getUserTypeId() {
@@ -97,16 +89,5 @@ public class User {
 
     public void setUserTypeId(UserType userTypeId) {
         this.userTypeId = userTypeId;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "userId=" + userId +
-                ", username='" + username + '\'' +
-                ", fullName='" + fullName + '\'' +
-                ", email='" + email + '\'' +
-                ", mobilePhoneNumber=" + mobilePhoneNumber +
-                '}';
     }
 }

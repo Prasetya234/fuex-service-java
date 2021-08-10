@@ -3,6 +3,7 @@ package com.service.fuex.engineer.service;
 import com.service.fuex.web.exception.ResourceNotFoundExceotion;
 import com.service.fuex.web.model.TemporaryOtp;
 import com.service.fuex.web.model.User;
+import com.service.fuex.web.response.CommonResponse;
 import freemarker.template.TemplateException;
 
 import javax.mail.MessagingException;
@@ -12,9 +13,9 @@ import java.io.IOException;
 public interface ValidateService {
     Object register(User userRequire) throws ResourceNotFoundExceotion;
 
-    Object login(HttpServletRequest request, TemporaryOtp createTemporaryOtp) throws ResourceNotFoundExceotion, TemplateException, MessagingException, IOException;
+    CommonResponse<User> login(HttpServletRequest request) ;
 
-    Object getUserByEmail(HttpServletRequest request) throws ResourceNotFoundExceotion;
+    CommonResponse<TemporaryOtp> getUserByEmail(HttpServletRequest request) throws ResourceNotFoundExceotion, TemplateException, MessagingException, IOException;
 
     TemporaryOtp checkingOtp(String otpNumber,String email) throws ResourceNotFoundExceotion;
 }

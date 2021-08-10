@@ -1,6 +1,9 @@
 package com.service.fuex.web.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "temporary_otp")
@@ -13,10 +16,16 @@ public class TemporaryOtp {
 
     private String email;
 
+    private Date expiredDate;
 
     public TemporaryOtp() {
     }
 
+    public TemporaryOtp(String otpNumber, Date expiredDate, boolean isVerified, String email) {
+        this.otpNumber = otpNumber;
+        this.isVerified = isVerified;
+        this.email = email;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,7 +46,7 @@ public class TemporaryOtp {
         this.otpNumber = otpNumber;
     }
 
-    @Column(name = "is_verified", nullable = true)
+    @Column(name = "is_verified")
     public boolean isVerified() {
         return isVerified;
     }
@@ -55,6 +64,17 @@ public class TemporaryOtp {
         this.email = email;
     }
 
+    @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Jakarta")
+    @Column(name = "date_expired")
+    public Date getExpiredDate() {
+        return expiredDate;
+    }
+
+    public void setExpiredDate(Date expiredDate) {
+        this.expiredDate = expiredDate;
+    }
+
     @Override
     public String toString() {
         return "TemporaryOtp{" +
@@ -62,6 +82,7 @@ public class TemporaryOtp {
                 ", otpNumber='" + otpNumber + '\'' +
                 ", isVerified=" + isVerified +
                 ", email='" + email + '\'' +
+                ", expiresAt=" + expiredDate +
                 '}';
     }
 }

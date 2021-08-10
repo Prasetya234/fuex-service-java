@@ -1,7 +1,5 @@
 package com.service.fuex.web.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.service.fuex.web.model.UserStatus;
 import com.service.fuex.web.model.UserType;
 
 import javax.validation.constraints.Email;
@@ -27,8 +25,6 @@ public class UserDTO {
     @NotBlank(message = "CAN NOT BE EMPETY")
     @Size(max = 12, message = "MAXIMUM 12 CHARACTERS")
     private String mobilePhoneNumber;
-
-    private UserStatus userStatusId;
 
     private UserType userTypeId;
 
@@ -71,14 +67,6 @@ public class UserDTO {
 
     public void setMobilePhoneNumber(String mobilePhoneNumber) {
         this.mobilePhoneNumber = mobilePhoneNumber;
-    }
-
-    public UserStatus getUserStatusId() {
-        return userStatusId;
-    }
-
-    public void setUserStatusId(UserStatus userStatusId) {
-        this.userStatusId = userStatusId;
     }
 
     public UserType getUserTypeId() {

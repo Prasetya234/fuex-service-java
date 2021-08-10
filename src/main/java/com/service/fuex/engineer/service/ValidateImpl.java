@@ -1,13 +1,11 @@
 package com.service.fuex.engineer.service;
 
 import com.service.fuex.engineer.email.EmailConfig;
-import com.service.fuex.engineer.email.EmailRegister;
 import com.service.fuex.web.exception.ResourceNotFoundExceotion;
 import com.service.fuex.web.model.TemporaryOtp;
 import com.service.fuex.web.model.User;
 import com.service.fuex.web.repository.TemporaryOtpRepository;
 import com.service.fuex.web.repository.UserRepository;
-import com.service.fuex.web.repository.UserStatusRepository;
 import com.service.fuex.web.repository.UserTypeRepository;
 import com.service.fuex.web.response.CommonResponse;
 import com.service.fuex.web.response.CommonResponseGenerator;
@@ -18,6 +16,8 @@ import org.springframework.stereotype.Service;
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -31,13 +31,7 @@ public class ValidateImpl implements ValidateService{
     private UserTypeRepository userTypeRepository;
 
     @Autowired
-    private UserStatusRepository userStatusRepository;
-
-    @Autowired
     private TemporaryOtpRepository temporaryOtpRepository;
-
-    @Autowired
-    private EmailRegister emailRegister;
 
     @Autowired
     private EmailConfig emailConfig;
@@ -55,30 +49,17 @@ public class ValidateImpl implements ValidateService{
         if (checkingMobilePhoneNumber != null) {
             return commonResponseGenerator.failResponse("NUMBER PHONE ALREADY EXIST");
         }
-        var idn =  userStatusRepository.findById(1L).get();
-        if (idn == null) {
-            return commonResponseGenerator.failResponse("USER STATUS ID NOT FOUND");
-        }
-        userRequire.setUserStatusId(idn);
         var hihi = userTypeRepository.findById(1L).get();
         if (hihi == null) {
             return  commonResponseGenerator.failResponse("USER TYPE ID NOT FOUND");
         }
         userRequire.setUserTypeId(hihi);
         var rambow = userRepository.save(userRequire);
-        try {
-            Map<String, Object> model = new HashMap<>();
-            model.put("username",  userRequire.getUsername());
-            model.put("id", rambow.getUserId());
-            emailRegister.sendEmail(userRequire.getEmail(), model);
-        } catch (Exception e) {
-            return commonResponseGenerator.failResponse( e.getMessage());
-        }
         return commonResponseGenerator.successResponse(rambow);
     }
 
     @Override
-    public CommonResponse<TemporaryOtp> login(HttpServletRequest request, TemporaryOtp createTemporaryOtp) throws TemplateException, MessagingException, IOException {
+    public CommonResponse<User> login(HttpServletRequest request) {
         String authorizationEmail = request.getHeader("email");
         String email;
         if(authorizationEmail != null){
@@ -87,38 +68,36 @@ public class ValidateImpl implements ValidateService{
                 if (checkingEmail == null){
                     return  commonResponseGenerator.failResponse( "YOUR EMAIL IS NOT REGISTERED");
                 }
-                if (checkingEmail.getUserStatusId().getUserStatusId().equals(1L)) {
-                    return commonResponseGenerator.failResponse( "YOUR ACCOUNT IS NOT ACTIVE");
-                }
+            return commonResponseGenerator.successResponse(checkingEmail);
+            }
+        return  commonResponseGenerator.failResponse("YOU MUST ACCESS ACCORDING TO THE PROCEDURE");
+    }
+
+    @Override
+    public CommonResponse<TemporaryOtp> getUserByEmail(HttpServletRequest request)  throws TemplateException, MessagingException, IOException {
+        String getUserByEmail = request.getHeader("email");
+        if (getUserByEmail != null){
+            User checkingEmail = userRepository.findByEmail(getUserByEmail);
+            if (checkingEmail != null){
+                return commonResponseGenerator.responseEmailNotFound("EMAIL ALREADY EXIST");
+            }
             Random random = new Random();
             int otpNumber = random.nextInt(1_000_000);
+            TemporaryOtp createTemporaryOtp = new TemporaryOtp();
             createTemporaryOtp.setOtpNumber(String.valueOf(otpNumber));
-            createTemporaryOtp.setEmail(checkingEmail.getEmail());
+            createTemporaryOtp.setEmail(getUserByEmail);
             createTemporaryOtp.setVerified(false);
-            var checkingUserOtp = temporaryOtpRepository.findByEmail(email);
+            createTemporaryOtp.setExpiredDate(new Date(System.currentTimeMillis() + 900000));
+            var checkingUserOtp = temporaryOtpRepository.findByEmail(getUserByEmail);
             if (checkingUserOtp != null) {
                 temporaryOtpRepository.deleteById(checkingUserOtp.getOtpId());
             }
             var end = temporaryOtpRepository.save(createTemporaryOtp);
             Map<String, Object> model = new HashMap<>();
-            model.put("username",  checkingEmail.getUsername());
+            model.put("username",  getUserByEmail);
             model.put("otp", end.getOtpNumber());
-            emailConfig.sendEmail(checkingEmail.getEmail(), model);
+            emailConfig.sendEmail(getUserByEmail, model);
             return commonResponseGenerator.successResponse(end);
-            }
-        return  commonResponseGenerator.failResponse("YOU MUST ACCESS ACCORDING TO THE PROCEDURE");
-    }
-    @Override
-    public Object getUserByEmail(HttpServletRequest request) {
-        String getUserByEmail = request.getHeader("email");
-        String email;
-        if (getUserByEmail != null){
-            email = getUserByEmail;
-            User checkingEmail = userRepository.findByEmail(email);
-            if (checkingEmail == null){
-                return commonResponseGenerator.responseEmailNotFound("EMAIL NOT FOUND");
-            }
-            return commonResponseGenerator.successResponse(checkingEmail);
         }
         return commonResponseGenerator.failResponse("NOT VALIDATED");
     }

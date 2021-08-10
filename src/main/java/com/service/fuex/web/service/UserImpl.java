@@ -2,7 +2,6 @@ package com.service.fuex.web.service;
 
 import com.service.fuex.web.model.User;
 import com.service.fuex.web.repository.UserRepository;
-import com.service.fuex.web.repository.UserStatusRepository;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -19,9 +18,6 @@ import java.util.Map;
 public class UserImpl implements  UserService{
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private UserStatusRepository userStatusRepository;
 
     @Autowired
     private Configuration config;
@@ -42,8 +38,6 @@ public class UserImpl implements  UserService{
     @Override
     public String getUserById(Long userId) throws TemplateException, IOException {
         var user = userRepository.findById(userId).get();
-        var checkingStatusUser = userStatusRepository.getById(2L);
-        user.setUserStatusId(checkingStatusUser);
         var somuch = userRepository.save(user);
         Map<String, Object> templates = new HashMap<>();
         templates.put("username",  somuch.getUsername());

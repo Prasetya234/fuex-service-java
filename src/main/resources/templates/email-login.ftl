@@ -17,10 +17,10 @@
 <table align="center" border="0" cellpadding="0" cellspacing="0" width="600" style="border-collapse: collapse;">
     <tr>
         <td bgcolor="#eaeaea" style="padding: 40px 30px 40px 30px;">
-            <p>User ${username},</p>
-            <p>Thanks you for joining us</p><br/>
+            <p>Hi ${username},</p><br/>
             <p>here is your access code: </p>
-            <p><a href="http://localhost:8080/home">${otp}</a></p>
+            <p style="color: #FF6F61;">${otp}</p><br/>
+            <p>Thanks you for joining us</p>
         </td>
     </tr>
     <tr>

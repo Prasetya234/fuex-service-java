@@ -1,7 +1,6 @@
 package com.service.fuex.web.controller;
 
 import com.service.fuex.web.dto.UserTypeDTO;
-import com.service.fuex.web.model.UserStatus;
 import com.service.fuex.web.model.UserType;
 import com.service.fuex.web.response.CommonResponse;
 import com.service.fuex.web.response.CommonResponseGenerator;
