@@ -47,7 +47,7 @@ public class Down {
         String from = EMAIL_SENDER;
         helper.setTo(emailTo);
         helper.setText(html, true);
-        helper.setSubject("Fuex Service password change request");
+        helper.setSubject("Fuex Service Password Change Request");
         helper.setFrom(from);
         mailSender.send(message);
     }

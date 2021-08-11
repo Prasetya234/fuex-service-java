@@ -65,7 +65,7 @@ public class Authentication {
         }
     }
 
-    @RequestMapping(value = "/request-change-password", method = RequestMethod.GET)
+    @RequestMapping(value = "/change-password/request", method = RequestMethod.GET)
     public CommonResponse<Object> changePasswordRequest(HttpServletRequest req) {
         try {
             return commonResponseGenerator.successResponse(validateService.requestSendChangePassword(req));
