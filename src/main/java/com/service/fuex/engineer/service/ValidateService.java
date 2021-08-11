@@ -1,6 +1,7 @@
 package com.service.fuex.engineer.service;
 
 import com.service.fuex.web.exception.ResourceNotFoundExceotion;
+import com.service.fuex.web.model.ChangePassword;
 import com.service.fuex.web.model.TemporaryOtp;
 import com.service.fuex.web.model.User;
 import com.service.fuex.web.response.CommonResponse;
@@ -17,5 +18,9 @@ public interface ValidateService {
 
     CommonResponse<TemporaryOtp> getUserByEmail(HttpServletRequest request) throws ResourceNotFoundExceotion, TemplateException, MessagingException, IOException;
 
-    TemporaryOtp checkingOtp(String otpNumber,String email) throws ResourceNotFoundExceotion;
+    CommonResponse<TemporaryOtp> checkingOtp(String otpNumber,String email);
+
+    CommonResponse<TemporaryOtp> requestChangePassword(ChangePassword changePassword);
+
+    Object requestSendChangePassword(HttpServletRequest request) throws TemplateException, MessagingException, IOException;
 }

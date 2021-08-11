@@ -10,6 +10,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query(value = "select a.* from useres a where a.mobile_phone_number= :mobilePhoneNumber", nativeQuery = true)
     User findByMobilePhoneNumber(String mobilePhoneNumber);
 
+    @Query(value = "select a.* from useres a where a.email= :email and a.password= :password", nativeQuery = true)
+    User findByEmail(String email, String password);
+
     @Query(value = "select a.* from useres a where a.email= :email", nativeQuery = true)
-    User findByEmail(String email);
+    User checkingAbilityUser(String email);
 }

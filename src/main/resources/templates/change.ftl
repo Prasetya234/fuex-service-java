@@ -17,10 +17,10 @@
 <table align="center" border="0" cellpadding="0" cellspacing="0" width="600" style="border-collapse: collapse;">
     <tr>
         <td bgcolor="#eaeaea" style="padding: 40px 30px 40px 30px;">
-            <p style="text-direction: none; color: black;">Hay everyone,</p><br/>
-            <p style="color: black;">here is your access code: </p>
+            <p style="text-direction: none; color: black;">Hi ${username},</p><br/>
+            <p style="color: black;">code for request to change your password: </p>
             <p style="font-size: 19px;"><b>${otp}</b></p><br/>
-            <p style="color: black;">Thanks you for joining us</p>
+            <p style="color: black;">Expired: ${date}</p>
         </td>
     </tr>
     <tr>

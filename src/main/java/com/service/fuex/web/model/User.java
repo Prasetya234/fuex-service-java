@@ -1,8 +1,10 @@
 package com.service.fuex.web.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jdk.jfr.Timestamp;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -17,21 +19,26 @@ public class User {
 
     private String fullName;
 
+    private String password;
+
     private String email;
 
     private String mobilePhoneNumber;
+
+    private Date createAt;
+
+    private Date updateAt;
 
     private  UserType userTypeId;
 
     public User() {
     }
 
-    public User(String username, String fullName, String email, String mobilePhoneNumber, UserType userTypeId) {
+    public User(String username, String fullName, String email, String mobilePhoneNumber) {
         this.username = username;
         this.fullName = fullName;
         this.email = email;
         this.mobilePhoneNumber = mobilePhoneNumber;
-        this.userTypeId = userTypeId;
     }
 
     @Id
@@ -62,6 +69,15 @@ public class User {
         this.fullName = fullName;
     }
 
+    @Column(name = "password", nullable = false)
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     @Column(name = "email", nullable = false)
     public String getEmail() {
         return email;
@@ -71,6 +87,7 @@ public class User {
         this.email = email;
     }
 
+
     @Column(name = "mobile_phone_number", nullable = false)
     public String getMobilePhoneNumber() {
         return mobilePhoneNumber;
@@ -78,6 +95,30 @@ public class User {
 
     public void setMobilePhoneNumber(String mobilePhoneNumber) {
         this.mobilePhoneNumber = mobilePhoneNumber;
+    }
+
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Jakarta")
+    @Column(name = "created_at")
+    public Date getCreateAt() {
+        return createAt;
+    }
+
+    @UpdateTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Jakarta")
+    @Column(name = "update_at")
+    public void setCreateAt(Date createAt) {
+        this.createAt = createAt;
+    }
+
+    public Date getUpdateAt() {
+        return updateAt;
+    }
+
+    public void setUpdateAt(Date updateAt) {
+        this.updateAt = updateAt;
     }
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
@@ -89,5 +130,20 @@ public class User {
 
     public void setUserTypeId(UserType userTypeId) {
         this.userTypeId = userTypeId;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "userId=" + userId +
+                ", username='" + username + '\'' +
+                ", fullName='" + fullName + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", mobilePhoneNumber='" + mobilePhoneNumber + '\'' +
+                ", createAt=" + createAt +
+                ", updateAt=" + updateAt +
+                ", userTypeId=" + userTypeId +
+                '}';
     }
 }

@@ -1,8 +1,8 @@
 package com.service.fuex.engineer.controller;
 
 import com.service.fuex.engineer.service.ValidateImpl;
-import com.service.fuex.web.dto.TemporaryOtpDTO;
 import com.service.fuex.web.exception.ResourceNotFoundExceotion;
+import com.service.fuex.web.model.ChangePassword;
 import com.service.fuex.web.model.TemporaryOtp;
 import com.service.fuex.web.model.User;
 import com.service.fuex.web.response.CommonResponse;
@@ -34,7 +34,7 @@ public class Authentication {
         try {
             return validateService.register(userDTORequire);
         } catch (Exception e) {
-            return commonResponseGenerator.failResponse(e.getMessage() + "anjay");
+            return commonResponseGenerator.failResponse(e.getMessage());
         }
     }
 
@@ -48,7 +48,7 @@ public class Authentication {
     }
 
     @RequestMapping(value = "/checking-avalibility-user", method = RequestMethod.GET)
-    public Object getUserByEmail(HttpServletRequest request) throws TemplateException, MessagingException, IOException {
+    public Object getUserByEmail(HttpServletRequest request)throws TemplateException, MessagingException, IOException {
         try {
             return validateService.getUserByEmail(request);
         } catch (Exception e) {
@@ -56,8 +56,30 @@ public class Authentication {
         }
     }
 
-    @RequestMapping(value = "/login/checking-otp", method = RequestMethod.GET)
-    public CommonResponse<TemporaryOtpDTO> checkingOtp(@RequestParam(name = "otpNumber") String otpNumber,@RequestParam(name = "email") String email) throws ResourceNotFoundExceotion{
-        return commonResponseGenerator.successResponse(validateService.checkingOtp(otpNumber,email));
+    @RequestMapping(value = "/checking-otp", method = RequestMethod.GET)
+    public CommonResponse<TemporaryOtp> checkingOtp(@RequestParam(name = "otp") String otpNumber, @RequestParam(name = "email") String email) throws ResourceNotFoundExceotion{
+        try {
+            return validateService.checkingOtp(otpNumber, email);
+        } catch (Exception e) {
+            return commonResponseGenerator.failResponse(e.getMessage());
+        }
+    }
+
+    @RequestMapping(value = "/request-change-password", method = RequestMethod.GET)
+    public CommonResponse<Object> changePasswordRequest(HttpServletRequest req) {
+        try {
+            return commonResponseGenerator.successResponse(validateService.requestSendChangePassword(req));
+        } catch (Exception e) {
+            return commonResponseGenerator.failResponse(e.getMessage());
+        }
+    }
+
+    @RequestMapping(value = "/change-password", method = RequestMethod.PUT)
+    public CommonResponse<TemporaryOtp> changePasswordUpdate(@RequestBody @Valid ChangePassword changePassword) {
+        try {
+            return validateService.requestChangePassword(changePassword);
+        } catch (Exception e) {
+            return commonResponseGenerator.failResponse(e.getMessage());
+        }
     }
 }

@@ -1,6 +1,5 @@
 package com.service.fuex.engineer.email;
 
-import com.service.fuex.web.exception.ResourceNotFoundExceotion;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -20,9 +19,7 @@ import java.util.Map;
 import java.util.Properties;
 
 @Component
-public class EmailConfig {
-    @Autowired
-    private JavaMailSender mailSender;
+public class Down {
 
     @Autowired
     private Configuration config;
@@ -31,30 +28,6 @@ public class EmailConfig {
     private String EMAIL_SENDER;
     @Value("${spring.mail.password}")
     private String PASSWORD_SENDER;
-
-    public void sendEmail(String emailTo, Map<String, Object> components)throws IOException, TemplateException, MessagingException {
-        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-        mailSender.setHost("smtp.gmail.com");
-        mailSender.setPort(587);
-        mailSender.setUsername(EMAIL_SENDER);
-        mailSender.setPassword(PASSWORD_SENDER);
-        Properties properties = new Properties();
-        properties.setProperty("mail.smtp.auth", "true");
-        properties.setProperty("mail.smtp.starttls.enable", "true");
-        mailSender.setJavaMailProperties(properties);
-
-        MimeMessage message = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
-                StandardCharsets.UTF_8.name());
-        Template t = config.getTemplate("email-login.ftl");
-        String html = FreeMarkerTemplateUtils.processTemplateIntoString(t, components);
-        String from = EMAIL_SENDER;
-        helper.setTo(emailTo);
-        helper.setText(html, true);
-        helper.setSubject("Access Code Fuex Service");
-        helper.setFrom(from);
-        mailSender.send(message);
-    }
 
     public void sendEmailReq(String emailTo, Map<String, Object> components)throws IOException, TemplateException, MessagingException {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
