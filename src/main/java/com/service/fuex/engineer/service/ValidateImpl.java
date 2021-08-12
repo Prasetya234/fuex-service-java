@@ -157,7 +157,7 @@ public class ValidateImpl implements ValidateService{
     }
 
     @Override
-    public Object requestSendChangePassword(HttpServletRequest request) throws TemplateException, MessagingException, IOException {
+    public CommonResponse<Object> requestSendChangePassword(HttpServletRequest request) throws TemplateException, MessagingException, IOException {
         String email = request.getHeader("email");
         if (email != null) {
             var checkigUser = userRepository.checkingAbilityUser(email);
@@ -180,7 +180,7 @@ public class ValidateImpl implements ValidateService{
             model.put("otp", isSuccess.getAccessCode());
             model.put("date", String.valueOf(isSuccess.getExpiredDate()));
             emailSending.sendEmailReq(email, model);
-            return  checkigUser;
+            return  commonResponseGenerator.successResponse(checkigUser);
         }
         return commonResponseGenerator.failResponse("HEADER NOT VALID");
     }
