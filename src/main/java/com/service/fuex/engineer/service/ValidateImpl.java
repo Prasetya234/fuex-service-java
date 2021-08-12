@@ -95,7 +95,7 @@ public class ValidateImpl implements ValidateService{
         if (getUserByEmail != null){
             User checkingEmail = userRepository.checkingAbilityUser(getUserByEmail);
             if (checkingEmail != null){
-                return commonResponseGenerator.responseEmailNotFound("EMAIL ALREADY EXIST");
+                return commonResponseGenerator.failResponse("EMAIL ALREADY EXIST");
             }
             Random random = new Random();
             int otpNumber = random.nextInt(1_000_000);
