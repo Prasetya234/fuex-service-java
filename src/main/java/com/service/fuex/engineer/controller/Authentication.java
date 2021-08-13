@@ -65,15 +65,6 @@ public class Authentication {
         }
     }
 
-    @RequestMapping(value = "/change-password/request", method = RequestMethod.GET)
-    public Object changePasswordRequest(HttpServletRequest req) {
-        try {
-            return validateService.requestSendChangePassword(req);
-        } catch (Exception e) {
-            return commonResponseGenerator.failResponse(e.getMessage());
-        }
-    }
-
     @RequestMapping(value = "/change-password", method = RequestMethod.PUT)
     public CommonResponse<TemporaryOtp> changePasswordUpdate(@RequestBody @Valid ChangePassword changePassword) {
         try {

@@ -1,13 +1,10 @@
 package com.service.fuex.engineer.service;
 
-import com.service.fuex.engineer.email.Down;
 import com.service.fuex.engineer.email.EmailConfig;
 import com.service.fuex.engineer.email.ProfileUserEmail;
-import com.service.fuex.web.model.AccessCode;
 import com.service.fuex.web.model.ChangePassword;
 import com.service.fuex.web.model.TemporaryOtp;
 import com.service.fuex.web.model.User;
-import com.service.fuex.web.repository.AccessCodeRepository;
 import com.service.fuex.web.repository.TemporaryOtpRepository;
 import com.service.fuex.web.repository.UserRepository;
 import com.service.fuex.web.repository.UserTypeRepository;
@@ -38,12 +35,6 @@ public class ValidateImpl implements ValidateService{
 
     @Autowired
     private EmailConfig emailConfig;
-
-    @Autowired
-    private AccessCodeRepository accessCodeRepository;
-
-    @Autowired
-    private Down emailSending;
 
     @Autowired
     private ProfileUserEmail userSendEmail;
@@ -146,51 +137,19 @@ public class ValidateImpl implements ValidateService{
 
     @Override
     public CommonResponse<TemporaryOtp> requestChangePassword(ChangePassword changePassword) {
-            final var checkingOtp = accessCodeRepository.sendOtp(changePassword.getAccessCode());
+            final var checkingOtp = temporaryOtpRepository.checkingOtpNumber(changePassword.getAccessCode());
             if (checkingOtp == null) {
                 return commonResponseGenerator.failResponse("ACCESS CODE NOT FOUND");
             }
-            final var expiredDate = checkingOtp.getExpiredDate();
-            final var newDate = new Date(System.currentTimeMillis());
-            if (expiredDate.getTime() < newDate.getTime()) {
-                return commonResponseGenerator.failResponse("ACCESS CODE HAS EXPIRED");
-            }
+        System.out.println("3");
             if (changePassword.getNewPassword().equals(changePassword.getConfirmPassword())) {
+                System.out.println("2");
                 var newPassword = userRepository.checkingAbilityUser(checkingOtp.getEmail());
                 newPassword.setPassword(changePassword.getNewPassword());
                 newPassword.setUpdateAt(new Date(System.currentTimeMillis()));
-                userRepository.save(newPassword);
-                return commonResponseGenerator.successResponse(newPassword);
+                return commonResponseGenerator.successResponse(userRepository.save(newPassword));
             }
-               return commonResponseGenerator.failResponse("PASSWORD CONFIRMATION MUST SAME");
+       return commonResponseGenerator.failResponse("PASSWORD CONFIRMATION MUST SAME");
     }
 
-    @Override
-    public CommonResponse<Object> requestSendChangePassword(HttpServletRequest request) throws TemplateException, MessagingException, IOException {
-        String email = request.getHeader("email");
-        if (email != null) {
-            var checkigUser = userRepository.checkingAbilityUser(email);
-            if (checkigUser == null) {
-                return commonResponseGenerator.failResponse("EMAIL NOOT FOUND");
-            }
-            Random random = new Random();
-            int access = random.nextInt(1_000_000);
-            AccessCode annotation = new AccessCode();
-            annotation.setAccessCode(String.valueOf(access));
-            annotation.setEmail(checkigUser.getEmail());
-            annotation.setExpiredDate(new Date(System.currentTimeMillis() + 900_000));
-            var kembarAtauTidak = accessCodeRepository.checkigUser(email);
-            if (kembarAtauTidak != null) {
-                accessCodeRepository.deleteById(kembarAtauTidak.getId());
-            }
-            var isSuccess = accessCodeRepository.save(annotation);
-            Map<String, Object> model = new HashMap<>();
-            model.put("username",  checkigUser.getUsername());
-            model.put("otp", isSuccess.getAccessCode());
-            model.put("date", String.valueOf(isSuccess.getExpiredDate()));
-            emailSending.sendEmailReq(email, model);
-            return  commonResponseGenerator.successResponse(checkigUser);
-        }
-        return commonResponseGenerator.failResponse("HEADER NOT VALID");
-    }
 }

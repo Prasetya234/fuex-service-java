@@ -21,6 +21,4 @@ public interface ValidateService {
     CommonResponse<TemporaryOtp> checkingOtp(String otpNumber,String email);
 
     CommonResponse<TemporaryOtp> requestChangePassword(ChangePassword changePassword);
-
-    Object requestSendChangePassword(HttpServletRequest request) throws TemplateException, MessagingException, IOException;
 }
