@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 public interface ValidateService {
-    Object register(User userRequire) throws ResourceNotFoundExceotion;
+    Object register(User userRequire) throws ResourceNotFoundExceotion, TemplateException, MessagingException, IOException;
 
     CommonResponse<User> login(HttpServletRequest request) ;
 

@@ -105,6 +105,7 @@ public class User {
         return createAt;
     }
 
+    @UpdateTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Jakarta")
     @Column(name = "update_at")

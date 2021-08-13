@@ -2,6 +2,7 @@ package com.service.fuex.engineer.service;
 
 import com.service.fuex.engineer.email.Down;
 import com.service.fuex.engineer.email.EmailConfig;
+import com.service.fuex.engineer.email.ProfileUserEmail;
 import com.service.fuex.web.model.AccessCode;
 import com.service.fuex.web.model.ChangePassword;
 import com.service.fuex.web.model.TemporaryOtp;
@@ -45,10 +46,13 @@ public class ValidateImpl implements ValidateService{
     private Down emailSending;
 
     @Autowired
+    private ProfileUserEmail userSendEmail;
+
+    @Autowired
     private CommonResponseGenerator commonResponseGenerator;
 
     @Override
-    public CommonResponse<User> register(User userRequire){
+    public CommonResponse<User> register(User userRequire) throws TemplateException, MessagingException, IOException {
         User checkingEmail = userRepository.checkingAbilityUser(userRequire.getEmail());
         if (checkingEmail != null) {
             return commonResponseGenerator.failResponse( "EMAIL ALREADY EXIST");
@@ -72,6 +76,11 @@ public class ValidateImpl implements ValidateService{
         String saltStr = salt.toString();
         userRequire.setPassword(saltStr);
         var rambow = userRepository.save(userRequire);
+        Map<String, Object> model = new HashMap<>();
+        model.put("username",  rambow.getUsername());
+        model.put("email",  String.valueOf(rambow.getEmail()));
+        model.put("password",  rambow.getPassword());
+        userSendEmail.sendEmailUser(rambow.getEmail(), model);
         return commonResponseGenerator.successResponse(rambow);
     }
 
