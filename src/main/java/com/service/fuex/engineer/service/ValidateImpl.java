@@ -52,7 +52,7 @@ public class ValidateImpl implements ValidateService{
         if (checkingMobilePhoneNumber != null) {
             return commonResponseGenerator.failResponse("NUMBER PHONE ALREADY EXIST");
         }
-        var hihi = userTypeRepository.findById(1L).get();
+        var hihi = userTypeRepository.findById(Long.valueOf(userRequire.getUserType())).get();
         if (hihi == null) {
             return  commonResponseGenerator.failResponse("USER TYPE ID NOT FOUND");
         }
@@ -141,9 +141,7 @@ public class ValidateImpl implements ValidateService{
             if (checkingOtp == null) {
                 return commonResponseGenerator.failResponse("ACCESS CODE NOT FOUND");
             }
-        System.out.println("3");
             if (changePassword.getNewPassword().equals(changePassword.getConfirmPassword())) {
-                System.out.println("2");
                 var newPassword = userRepository.checkingAbilityUser(checkingOtp.getEmail());
                 newPassword.setPassword(changePassword.getNewPassword());
                 newPassword.setUpdateAt(new Date(System.currentTimeMillis()));

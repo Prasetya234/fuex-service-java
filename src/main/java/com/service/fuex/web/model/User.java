@@ -2,6 +2,7 @@ package com.service.fuex.web.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jdk.jfr.Timestamp;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -29,16 +30,19 @@ public class User {
 
     private Date updateAt;
 
+    private String userType;
+
     private  UserType userTypeId;
 
     public User() {
     }
 
-    public User(String username, String fullName, String email, String mobilePhoneNumber) {
+    public User(String username, String fullName, String email, String mobilePhoneNumber, String userType) {
         this.username = username;
         this.fullName = fullName;
         this.email = email;
         this.mobilePhoneNumber = mobilePhoneNumber;
+        this.userType = userType;
     }
 
     @Id
@@ -119,6 +123,16 @@ public class User {
 
     public void setUpdateAt(Date updateAt) {
         this.updateAt = updateAt;
+    }
+
+    @Column(name = "user_type", nullable = false)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    public String getUserType() {
+        return userType;
+    }
+
+    public void setUserType(String userType) {
+        this.userType = userType;
     }
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
