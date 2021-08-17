@@ -1,3 +1,5 @@
 # fuex-service-java
 
-Dalam Pengembangan 
+Dalam pengembangan terus menerus
+
+- Going to Jakarta
