@@ -1,55 +1,61 @@
 package com.service.fuex.web.controller;
 
-import com.service.fuex.web.model.Vocher;
-import com.service.fuex.web.response.CommonResponse;
+import com.service.fuex.web.model.FuelType;
 import com.service.fuex.web.response.CommonResponseGenerator;
-import com.service.fuex.web.service.VocherImpl;
+import com.service.fuex.web.service.FuelTypeImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
-@RequestMapping("/key/vocher")
-public class VocherController {
+@RequestMapping("/reference/fuel-type")
+public class FuelTypeController {
 
     @Autowired
-    private VocherImpl vocher;
+    private FuelTypeImpl fuelTypeService;
 
     @Autowired
     private CommonResponseGenerator commonResponseGenerator;
 
     @GetMapping
-    public CommonResponse<List<Vocher>> getAll(){
+    public Object getAll() {
         try {
-            return commonResponseGenerator.successResponse(vocher.getAll());
+            return fuelTypeService.getAll();
+        } catch (Exception e) {
+            return commonResponseGenerator.failResponse(e.getMessage());
+        }
+    }
+
+    @GetMapping("/{id}")
+    public Object getById(@PathVariable(name = "id")Long id) {
+        try {
+            return fuelTypeService.getById(id);
         } catch (Exception e) {
             return commonResponseGenerator.failResponse(e.getMessage());
         }
     }
 
     @PostMapping("/")
-    public CommonResponse<Vocher> create(@RequestBody Vocher vocher1) {
+    public Object create(@RequestBody FuelType fuelType) {
         try {
-            return commonResponseGenerator.successResponse(vocher.create(vocher1));
+            return fuelTypeService.create(fuelType);
         } catch (Exception e) {
             return commonResponseGenerator.failResponse(e.getMessage());
         }
     }
 
     @PutMapping("/{id}")
-    public Object update(@PathVariable("id") Long id,@RequestBody Vocher vocher1) {
+    public Object update(@PathVariable(name = "id")Long id, @RequestBody FuelType fuel) {
         try {
-            return vocher.update(id, vocher1);
+            return fuelTypeService.update(id, fuel);
         } catch (Exception e) {
             return commonResponseGenerator.failResponse(e.getMessage());
         }
     }
 
     @DeleteMapping("/{id}")
-    public Object delete(@PathVariable("id") Long id) {
+    public Object delete(@PathVariable(name = "id") Long id) {
         try {
-            return vocher.delete(id);
+            return fuelTypeService.delete(id);
         } catch (Exception e) {
             return commonResponseGenerator.failResponse(e.getMessage());
         }

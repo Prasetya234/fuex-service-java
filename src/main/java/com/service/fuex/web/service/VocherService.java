@@ -1,9 +1,9 @@
 package com.service.fuex.web.service;
 
 import com.service.fuex.web.model.Vocher;
+import com.service.fuex.web.response.CommonResponse;
 
 import java.util.List;
-import java.util.Map;
 
 public interface VocherService {
 
@@ -11,7 +11,7 @@ public interface VocherService {
 
     Vocher create(Vocher vocher);
 
-    Vocher update(Long id, Vocher vocher);
+    CommonResponse<Vocher> update(Long id, Vocher vocher);
 
-    Map<String, Boolean> delete(Long id);
+    CommonResponse<Vocher> delete(Long id);
 }

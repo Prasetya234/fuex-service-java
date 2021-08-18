@@ -1,55 +1,54 @@
 package com.service.fuex.web.controller;
 
-import com.service.fuex.web.model.Vocher;
+import com.service.fuex.web.model.LocationOrder;
 import com.service.fuex.web.response.CommonResponse;
 import com.service.fuex.web.response.CommonResponseGenerator;
-import com.service.fuex.web.service.VocherImpl;
+import com.service.fuex.web.service.LocationOrderImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/key/vocher")
-public class VocherController {
-
+@RequestMapping("/order-detail/location-order")
+public class LocationOrderController {
     @Autowired
-    private VocherImpl vocher;
+    private LocationOrderImpl locationOrder;
 
     @Autowired
     private CommonResponseGenerator commonResponseGenerator;
 
     @GetMapping
-    public CommonResponse<List<Vocher>> getAll(){
+    public CommonResponse<List<LocationOrder>> getAll() {
         try {
-            return commonResponseGenerator.successResponse(vocher.getAll());
+            return commonResponseGenerator.successResponse(locationOrder.getAll());
         } catch (Exception e) {
             return commonResponseGenerator.failResponse(e.getMessage());
         }
     }
 
-    @PostMapping("/")
-    public CommonResponse<Vocher> create(@RequestBody Vocher vocher1) {
+    @PostMapping
+    public CommonResponse<LocationOrder> create(@RequestBody LocationOrder create) {
         try {
-            return commonResponseGenerator.successResponse(vocher.create(vocher1));
+            return commonResponseGenerator.successResponse(locationOrder.create(create));
         } catch (Exception e) {
             return commonResponseGenerator.failResponse(e.getMessage());
         }
     }
 
     @PutMapping("/{id}")
-    public Object update(@PathVariable("id") Long id,@RequestBody Vocher vocher1) {
+    private Object update(@PathVariable(value = "id")Long id, @RequestBody LocationOrder update) {
         try {
-            return vocher.update(id, vocher1);
+            return locationOrder.update(id, update);
         } catch (Exception e) {
             return commonResponseGenerator.failResponse(e.getMessage());
         }
     }
 
     @DeleteMapping("/{id}")
-    public Object delete(@PathVariable("id") Long id) {
+    private Object delete(@PathVariable(value = "id")Long id)  {
         try {
-            return vocher.delete(id);
+            return locationOrder.delete(id);
         } catch (Exception e) {
             return commonResponseGenerator.failResponse(e.getMessage());
         }
