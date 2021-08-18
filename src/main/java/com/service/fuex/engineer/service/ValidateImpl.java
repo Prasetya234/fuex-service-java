@@ -52,6 +52,7 @@ public class ValidateImpl implements ValidateService{
         if (checkingMobilePhoneNumber != null) {
             return commonResponseGenerator.failResponse("NUMBER PHONE ALREADY EXIST");
         }
+        userRequire.setUserType(String.valueOf(1));
         var hihi = userTypeRepository.findById(Long.valueOf(userRequire.getUserType())).get();
         if (hihi == null) {
             return  commonResponseGenerator.failResponse("USER TYPE ID NOT FOUND");

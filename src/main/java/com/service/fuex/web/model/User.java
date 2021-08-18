@@ -125,7 +125,7 @@ public class User {
         this.updateAt = updateAt;
     }
 
-    @Column(name = "user_type", nullable = false)
+    @Column(name = "user_type")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     public String getUserType() {
         return userType;
