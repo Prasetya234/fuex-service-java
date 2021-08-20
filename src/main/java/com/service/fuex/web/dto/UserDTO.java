@@ -4,38 +4,33 @@ import com.service.fuex.web.model.UserType;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 public class UserDTO {
 
-    private Long userId;
 
-    @NotBlank(message = "CAN NOT BE EMPTY")
+    @NotBlank(message = "USERNAME CANNOT BE EMPTY")
     @Size(max = 255, message = "MAXIMUM 255 CHARACTERS")
     private String username;
 
-    @NotBlank(message = "CAN NOT BE EMPTY")
+    @NotBlank(message = "FULL NAME CANNOT BE EMPTY")
     @Size(max = 255, message = "MAXIMUM 255 CHARACTERS")
     private String fullName;
 
+    @NotNull(message = "EMAIL CANNOT BE EMPTY")
     @Email(message = "MUST CONTAIN EMAIL")
     @Size(max = 255, message = "MAXIMUM 255 CHARACTERS")
     private String email;
 
-    @NotBlank(message = "CAN NOT BE EMPETY")
+    @NotNull(message = "MOBILE PHONE NUMBER CAN NOT BE EMPTY")
     @Size(max = 12, message = "MAXIMUM 12 CHARACTERS")
     private String mobilePhoneNumber;
 
-    private UserType userTypeId;
-
+    @NotNull(message = "USER TYPE NUMBER CAN NOT BE EMPTY")
+    @Size(max = 12, message = "MAXIMUM 12 CHARACTERS")
+    private String userType;
     // SETTER & GETTER
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
 
     public String getUsername() {
         return username;
@@ -69,11 +64,11 @@ public class UserDTO {
         this.mobilePhoneNumber = mobilePhoneNumber;
     }
 
-    public UserType getUserTypeId() {
-        return userTypeId;
+    public String getUserType() {
+        return userType;
     }
 
-    public void setUserTypeId(UserType userTypeId) {
-        this.userTypeId = userTypeId;
+    public void setUserType(String userType) {
+        this.userType = userType;
     }
 }

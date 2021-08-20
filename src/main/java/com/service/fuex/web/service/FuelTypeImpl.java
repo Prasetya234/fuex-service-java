@@ -7,11 +7,13 @@ import com.service.fuex.web.response.CommonResponseGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @Service
+@Transactional
 public class FuelTypeImpl implements FuelTypeService {
     @Autowired
     private FuelTypeRepository fuelTypeRepository;
@@ -61,6 +63,4 @@ public class FuelTypeImpl implements FuelTypeService {
         response.put("DELETED", Boolean.TRUE);
         return commonResponseGenerator.successResponse(response);
     }
-
-
 }

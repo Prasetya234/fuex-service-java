@@ -1,27 +1,26 @@
 package com.service.fuex.web.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.*;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "fuel_type")
+//@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class FuelType {
     private Long fuelTypeId;
     private String tipeBensin;
     private int price;
     private int capacity;
-    private String vehicleTypeName;
     private VehicleType vehicleType;
 
     public FuelType() {
     }
 
-    public FuelType(String tipeBensin, int price, int capacity, String vehicleTypeName) {
+    public FuelType(String tipeBensin, int price, int capacity) {
         this.tipeBensin = tipeBensin;
         this.price = price;
         this.capacity = capacity;
-        this.vehicleTypeName = vehicleTypeName;
     }
 
     @Id
@@ -61,24 +60,16 @@ public class FuelType {
         this.capacity = capacity;
     }
 
+    @JsonManagedReference
     @ManyToOne(fetch = FetchType.LAZY, cascade =  CascadeType.MERGE)
     @JoinColumn(name = "vehicle_type_id")
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     public VehicleType getVehicleType() {
         return vehicleType;
     }
 
     public void setVehicleType(VehicleType vehicleType) {
         this.vehicleType = vehicleType;
-    }
-
-    @Column(name = "vehicle_type_name")
-    public String getVehicleTypeName() {
-        return vehicleTypeName;
-    }
-
-    public void setVehicleTypeName(String vehicleTypeName) {
-        this.vehicleTypeName = vehicleTypeName;
     }
 
     @Override
@@ -88,7 +79,6 @@ public class FuelType {
                 ", tipeBensin='" + tipeBensin + '\'' +
                 ", price=" + price +
                 ", capacity=" + capacity +
-                ", vehicleTypeName='" + vehicleTypeName + '\'' +
                 ", vehicleType=" + vehicleType +
                 '}';
     }

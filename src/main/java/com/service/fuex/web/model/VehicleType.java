@@ -1,5 +1,7 @@
 package com.service.fuex.web.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -8,6 +10,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "kendaraan_type")
+//@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class VehicleType {
     private Long vehicleTypeId;
     private String tipeKendaraan;
@@ -40,6 +43,7 @@ public class VehicleType {
     }
 
     @OneToMany(mappedBy = "vehicleType", cascade = CascadeType.ALL)
+    @JsonBackReference
     public Set<FuelType> getFuelTypeId() {
         return fuelTypeId;
     }

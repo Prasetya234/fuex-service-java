@@ -1,6 +1,7 @@
 package com.service.fuex.engineer.controller;
 
 import com.service.fuex.engineer.service.ValidateImpl;
+import com.service.fuex.web.dto.UserDTO;
 import com.service.fuex.web.exception.ResourceNotFoundExceotion;
 import com.service.fuex.web.model.ChangePassword;
 import com.service.fuex.web.model.TemporaryOtp;
@@ -32,9 +33,10 @@ public class Authentication {
     private ValidateImpl validateService;
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public CommonResponse<User> registerUser(@RequestBody @Valid User userDTORequire){
+    public CommonResponse<User> registerUser(@RequestBody @Valid UserDTO userDTORequire){
         try {
-            return validateService.register(userDTORequire);
+            User user = modelMapper.map(userDTORequire, User.class);
+            return validateService.register(user);
         } catch (Exception e) {
             return commonResponseGenerator.failResponse(e.getMessage());
         }
