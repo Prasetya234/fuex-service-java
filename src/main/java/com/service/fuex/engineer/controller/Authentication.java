@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
 
@@ -33,7 +32,7 @@ public class Authentication {
     private ValidateImpl validateService;
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public CommonResponse<User> registerUser(@RequestBody @Valid UserDTO userDTORequire){
+    public CommonResponse<UserDTO> registerUser(@RequestBody @Valid UserDTO userDTORequire){
         try {
             User user = modelMapper.map(userDTORequire, User.class);
             return validateService.register(user);
@@ -43,21 +42,17 @@ public class Authentication {
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public Object login(HttpServletRequest request) throws TemplateException, MessagingException, IOException {
+    public CommonResponse<UserDTO> login(@RequestHeader(value = "email") String email, @RequestHeader(value = "password") String password) throws TemplateException, MessagingException, IOException {
         try {
-            return validateService.login(request);
+            return commonResponseGenerator.successResponse(validateService.login(email, password));
         } catch (Exception e) {
             return commonResponseGenerator.failResponse(e.getMessage());
         }
     }
 
     @RequestMapping(value = "/checking-avalibility-user", method = RequestMethod.GET)
-    public Object getUserByEmail(HttpServletRequest request)throws TemplateException, MessagingException, IOException {
-        try {
-            return validateService.getUserByEmail(request);
-        } catch (Exception e) {
-            return commonResponseGenerator.failResponse(e.getMessage());
-        }
+    public CommonResponse<TemporaryOtp> getUserByEmail(@RequestHeader(value = "email") String email) throws TemplateException, MessagingException, IOException {
+        return validateService.getUserByEmail(email);
     }
 
     @RequestMapping(value = "/checking-otp", method = RequestMethod.GET)
@@ -70,9 +65,9 @@ public class Authentication {
     }
 
     @RequestMapping(value = "/change-password", method = RequestMethod.PUT)
-    public CommonResponse<TemporaryOtp> changePasswordUpdate(@RequestBody @Valid ChangePassword changePassword) {
+    public CommonResponse<UserDTO> changePasswordUpdate(@RequestBody @Valid ChangePassword changePassword) {
         try {
-            return validateService.requestChangePassword(changePassword);
+            return commonResponseGenerator.successResponse(validateService.requestChangePassword(changePassword));
         } catch (Exception e) {
             return commonResponseGenerator.failResponse(e.getMessage());
         }

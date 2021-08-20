@@ -3,9 +3,7 @@ package com.service.fuex.web.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -43,7 +41,6 @@ public class VehicleType {
     }
 
     @OneToMany(mappedBy = "vehicleType", cascade = CascadeType.ALL)
-    @JsonBackReference
     public Set<FuelType> getFuelTypeId() {
         return fuelTypeId;
     }

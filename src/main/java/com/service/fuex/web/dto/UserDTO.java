@@ -27,9 +27,6 @@ public class UserDTO {
     @Size(max = 12, message = "MAXIMUM 12 CHARACTERS")
     private String mobilePhoneNumber;
 
-    @NotNull(message = "USER TYPE NUMBER CAN NOT BE EMPTY")
-    @Size(max = 12, message = "MAXIMUM 12 CHARACTERS")
-    private String userType;
     // SETTER & GETTER
 
     public String getUsername() {
@@ -62,13 +59,5 @@ public class UserDTO {
 
     public void setMobilePhoneNumber(String mobilePhoneNumber) {
         this.mobilePhoneNumber = mobilePhoneNumber;
-    }
-
-    public String getUserType() {
-        return userType;
-    }
-
-    public void setUserType(String userType) {
-        this.userType = userType;
     }
 }

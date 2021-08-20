@@ -14,11 +14,11 @@ import java.io.IOException;
 public interface ValidateService {
     Object register(User userRequire) throws ResourceNotFoundExceotion, TemplateException, MessagingException, IOException;
 
-    CommonResponse<User> login(HttpServletRequest request) ;
+    Object login(String email, String password) ;
 
-    CommonResponse<TemporaryOtp> getUserByEmail(HttpServletRequest request) throws ResourceNotFoundExceotion, TemplateException, MessagingException, IOException;
+    CommonResponse<TemporaryOtp> getUserByEmail(String email) throws ResourceNotFoundExceotion, TemplateException, MessagingException, IOException;
 
     CommonResponse<TemporaryOtp> checkingOtp(String otpNumber,String email);
 
-    CommonResponse<TemporaryOtp> requestChangePassword(ChangePassword changePassword);
+    Object requestChangePassword(ChangePassword changePassword);
 }

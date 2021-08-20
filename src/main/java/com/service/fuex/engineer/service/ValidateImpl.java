@@ -2,6 +2,7 @@ package com.service.fuex.engineer.service;
 
 import com.service.fuex.engineer.email.EmailConfig;
 import com.service.fuex.engineer.email.ProfileUserEmail;
+import com.service.fuex.web.dto.UserDTO;
 import com.service.fuex.web.model.ChangePassword;
 import com.service.fuex.web.model.TemporaryOtp;
 import com.service.fuex.web.model.User;
@@ -43,7 +44,7 @@ public class ValidateImpl implements ValidateService{
     private CommonResponseGenerator commonResponseGenerator;
 
     @Override
-    public CommonResponse<User> register(User userRequire) throws TemplateException, MessagingException, IOException {
+    public CommonResponse<UserDTO> register(User userRequire) throws TemplateException, MessagingException, IOException {
         User checkingEmail = userRepository.checkingAbilityUser(userRequire.getEmail());
         if (checkingEmail != null) {
             return commonResponseGenerator.failResponse( "EMAIL ALREADY EXIST");
@@ -77,46 +78,47 @@ public class ValidateImpl implements ValidateService{
     }
 
     @Override
-    public CommonResponse<User> login(HttpServletRequest request) {
-        String authorizationEmail = request.getHeader("email");
-        String authorizationPassword = request.getHeader("password");
-        if(authorizationEmail != null && authorizationPassword != null){
-            User checkingEmail = userRepository.findByEmail(authorizationEmail, authorizationPassword);
+    public Object login(String email, String password) {
+        if(email != null && password != null){
+            User checkingEmail = userRepository.findByEmail(email, password);
             if (checkingEmail == null){
                 return  commonResponseGenerator.failResponse( "EMAIL OR PASSWORD NOT FOUND");
             }
-            return commonResponseGenerator.successResponse(checkingEmail);
+            return checkingEmail;
             }
         return  commonResponseGenerator.failResponse("YOU MUST ACCESS ACCORDING TO THE PROCEDURE");
     }
 
     @Override
-    public CommonResponse<TemporaryOtp> getUserByEmail(HttpServletRequest request)  throws TemplateException, MessagingException, IOException {
-        String getUserByEmail = request.getHeader("email");
-        if (getUserByEmail != null){
-            User checkingEmail = userRepository.checkingAbilityUser(getUserByEmail);
-            if (checkingEmail != null){
-                return commonResponseGenerator.failResponse("EMAIL ALREADY EXIST");
+    public CommonResponse<TemporaryOtp> getUserByEmail(String email)  throws TemplateException, MessagingException, IOException {
+        try {
+            if (email != null) {
+                User checkingEmail = userRepository.checkingAbilityUser(email);
+                if (checkingEmail != null) {
+                    return commonResponseGenerator.failResponse("EMAIL ALREADY EXIST");
+                }
+                Random random = new Random();
+                int otpNumber = random.nextInt(1_000_000);
+                TemporaryOtp createTemporaryOtp = new TemporaryOtp();
+                createTemporaryOtp.setOtpNumber(String.valueOf(otpNumber));
+                createTemporaryOtp.setEmail(email);
+                createTemporaryOtp.setVerified(false);
+                createTemporaryOtp.setExpiredDate(new Date(System.currentTimeMillis() + 900_000));
+                var checkingUserOtp = temporaryOtpRepository.findByEmail(email);
+                if (checkingUserOtp != null) {
+                    temporaryOtpRepository.deleteById(checkingUserOtp.getOtpId());
+                }
+                var end = temporaryOtpRepository.save(createTemporaryOtp);
+                Map<String, Object> model = new HashMap<>();
+                model.put("username", email);
+                model.put("otp", end.getOtpNumber());
+                emailConfig.sendEmail(email, model);
+                return commonResponseGenerator.successResponse(end);
             }
-            Random random = new Random();
-            int otpNumber = random.nextInt(1_000_000);
-            TemporaryOtp createTemporaryOtp = new TemporaryOtp();
-            createTemporaryOtp.setOtpNumber(String.valueOf(otpNumber));
-            createTemporaryOtp.setEmail(getUserByEmail);
-            createTemporaryOtp.setVerified(false);
-            createTemporaryOtp.setExpiredDate(new Date(System.currentTimeMillis() + 900_000));
-            var checkingUserOtp = temporaryOtpRepository.findByEmail(getUserByEmail);
-            if (checkingUserOtp != null) {
-                temporaryOtpRepository.deleteById(checkingUserOtp.getOtpId());
-            }
-            var end = temporaryOtpRepository.save(createTemporaryOtp);
-            Map<String, Object> model = new HashMap<>();
-            model.put("username",  getUserByEmail);
-            model.put("otp", end.getOtpNumber());
-            emailConfig.sendEmail(getUserByEmail, model);
-            return commonResponseGenerator.successResponse(end);
+            return commonResponseGenerator.failResponse("NOT VALIDATED");
+        } catch (Exception e) {
+            return commonResponseGenerator.failResponse(e.getMessage());
         }
-        return commonResponseGenerator.failResponse("NOT VALIDATED");
     }
 
     @Override
@@ -137,7 +139,8 @@ public class ValidateImpl implements ValidateService{
     }
 
     @Override
-    public CommonResponse<TemporaryOtp> requestChangePassword(ChangePassword changePassword) {
+    public CommonResponse<Object> requestChangePassword(ChangePassword changePassword) {
+        try {
             final var checkingOtp = temporaryOtpRepository.checkingOtpNumber(changePassword.getAccessCode());
             if (checkingOtp == null) {
                 return commonResponseGenerator.failResponse("ACCESS CODE NOT FOUND");
@@ -148,7 +151,10 @@ public class ValidateImpl implements ValidateService{
                 newPassword.setUpdateAt(new Date(System.currentTimeMillis()));
                 return commonResponseGenerator.successResponse(userRepository.save(newPassword));
             }
-       return commonResponseGenerator.failResponse("PASSWORD CONFIRMATION MUST SAME");
+            return commonResponseGenerator.failResponse("PASSWORD CONFIRMATION MUST SAME");
+        }catch(Exception e) {
+            return commonResponseGenerator.failResponse(e.getMessage());
+        }
     }
 
 }
