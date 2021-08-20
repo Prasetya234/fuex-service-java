@@ -9,7 +9,6 @@ import com.service.fuex.web.model.User;
 import com.service.fuex.web.response.CommonResponse;
 import com.service.fuex.web.response.CommonResponseGenerator;
 import freemarker.template.TemplateException;
-import io.swagger.annotations.Api;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +17,6 @@ import javax.mail.MessagingException;
 import javax.validation.Valid;
 import java.io.IOException;
 
-@Api(value = "Authentication", description = "REST API for Login & Register")
 @RestController
 public class Authentication {
 

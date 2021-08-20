@@ -3,11 +3,9 @@ package com.service.fuex.web.controller;
 import com.service.fuex.web.model.VehicleType;
 import com.service.fuex.web.response.CommonResponseGenerator;
 import com.service.fuex.web.service.VehicleTypeImpl;
-import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-@Api(value = "reference/vehicle-type", description = "Vehicle Type Controller")
 @RestController
 @RequestMapping("/reference/vehicle-type")
 public class VehicleTypeController {

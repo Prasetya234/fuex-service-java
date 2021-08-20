@@ -5,7 +5,6 @@ import com.service.fuex.web.response.CommonResponse;
 import com.service.fuex.web.response.CommonResponseGenerator;
 import com.service.fuex.web.service.UserImpl;
 import freemarker.template.TemplateException;
-import io.swagger.annotations.Api;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +13,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-@Api(value = "user", description = "User Controller")
 @RestController
 @RequestMapping("/user")
 public class UserController {

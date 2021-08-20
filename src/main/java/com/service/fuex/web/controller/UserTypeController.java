@@ -5,7 +5,6 @@ import com.service.fuex.web.model.UserType;
 import com.service.fuex.web.response.CommonResponse;
 import com.service.fuex.web.response.CommonResponseGenerator;
 import com.service.fuex.web.service.UserTypeImpl;
-import io.swagger.annotations.Api;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +14,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
-@Api(value = "reference/user-type", description = "User Type Controller")
 @RestController
 @RequestMapping("/reference/user-type")
 public class UserTypeController {

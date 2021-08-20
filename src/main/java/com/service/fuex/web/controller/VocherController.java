@@ -4,13 +4,11 @@ import com.service.fuex.web.model.Vocher;
 import com.service.fuex.web.response.CommonResponse;
 import com.service.fuex.web.response.CommonResponseGenerator;
 import com.service.fuex.web.service.VocherImpl;
-import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Api(value = "key/vocher", description = "Vhocers Controller")
 @RestController
 @RequestMapping("/key/vocher")
 public class VocherController {
