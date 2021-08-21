@@ -13,15 +13,15 @@ public class Vocher {
 
     private Long vocherId;
     private String code;
-    private int inUseCount;
+    private Integer inUseCount;
     private Date expiredDate;
     private String image;
-    private int discount;
+    private Integer discount;
 
     public Vocher() {
     }
 
-    public Vocher(String code, String image, Date expiredDate, int discount) {
+    public Vocher(String code, String image, Date expiredDate, Integer discount) {
         this.expiredDate = expiredDate;
         this.code = code;
         this.image = image;
@@ -42,7 +42,7 @@ public class Vocher {
         this.vocherId = vocherId;
     }
 
-    @Column(name= "code", nullable = false)
+    @Column(name= "code", nullable = false, unique = true)
     public String getCode() {
         return code;
     }
@@ -52,11 +52,11 @@ public class Vocher {
     }
 
     @Column(name = "use_count")
-    public int getInUseCount() {
+    public Integer getInUseCount() {
         return inUseCount;
     }
 
-    public void setInUseCount(int inUseCount) {
+    public void setInUseCount(Integer inUseCount) {
         this.inUseCount = inUseCount;
     }
 
@@ -82,11 +82,11 @@ public class Vocher {
     }
 
     @Column(name = "discount", nullable = false)
-    public int getDiscount() {
+    public Integer getDiscount() {
         return discount;
     }
 
-    public void setDiscount(int discount) {
+    public void setDiscount(Integer discount) {
         this.discount = discount;
     }
 

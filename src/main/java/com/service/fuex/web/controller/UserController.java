@@ -26,9 +26,9 @@ public class UserController {
     private CommonResponseGenerator commonResponseGenerator;
 
     @GetMapping
-    public CommonResponse<List<UserDTO>> getAll() {
+    public CommonResponse<List<UserDTO>> getAll(@RequestHeader(value = "access") String access){
         try {
-            return commonResponseGenerator.successResponse(userService.getAll());
+            return commonResponseGenerator.successResponse(userService.getAll(access));
         } catch (Exception e) {
             return commonResponseGenerator.failResponse(e.getMessage());
         }

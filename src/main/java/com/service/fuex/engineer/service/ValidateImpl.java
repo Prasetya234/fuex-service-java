@@ -3,9 +3,12 @@ package com.service.fuex.engineer.service;
 import com.service.fuex.engineer.email.EmailConfig;
 import com.service.fuex.engineer.email.ProfileUserEmail;
 import com.service.fuex.web.dto.UserDTO;
+import com.service.fuex.web.exception.ResourceNotFoundExceotion;
 import com.service.fuex.web.model.ChangePassword;
+import com.service.fuex.web.model.ChangePasswordRequest;
 import com.service.fuex.web.model.TemporaryOtp;
 import com.service.fuex.web.model.User;
+import com.service.fuex.web.repository.ChangePasswordRequestRepository;
 import com.service.fuex.web.repository.TemporaryOtpRepository;
 import com.service.fuex.web.repository.UserRepository;
 import com.service.fuex.web.repository.UserTypeRepository;
@@ -16,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
-import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
@@ -42,6 +44,9 @@ public class ValidateImpl implements ValidateService{
 
     @Autowired
     private CommonResponseGenerator commonResponseGenerator;
+
+    @Autowired
+    private ChangePasswordRequestRepository changePasswordRequestRepository;
 
     @Override
     public CommonResponse<UserDTO> register(User userRequire) throws TemplateException, MessagingException, IOException {
@@ -139,9 +144,42 @@ public class ValidateImpl implements ValidateService{
     }
 
     @Override
-    public CommonResponse<Object> requestChangePassword(ChangePassword changePassword) {
+    public ChangePasswordRequest changePasswordRequest(String email) throws ResourceNotFoundExceotion, TemplateException, MessagingException, IOException {
+        var MPA02 = userRepository.checkingAbilityUser(email);
+        if (MPA02 == null) {
+            throw new ResourceNotFoundExceotion("EMAIL NOT FOUND");
+        }
+        var AIDSO02 = changePasswordRequestRepository.findByEmail(email);
+        if (AIDSO02 != null){
+            changePasswordRequestRepository.deleteById(AIDSO02.getId());
+        }
+        Random random = new Random();
+        int code = random.nextInt(1_000_000);
+        ChangePasswordRequest request = new ChangePasswordRequest();
+        request.setCode(String.valueOf(code));
+        request.setEmail(email);
+        request.setAlreadyUsed(false);
+        var sss=  changePasswordRequestRepository.save(request);
+        Map<String, Object> model = new HashMap<>();
+        model.put("yayay", sss.getCode());
+        emailConfig.sendEmailRequestPassword(email, model);
+        return request;
+    }
+
+    @Override
+    public ChangePasswordRequest checkingCode(String code) throws ResourceNotFoundExceotion {
+        var MAI03 = changePasswordRequestRepository.findByCode(code);
+        if (MAI03 == null) {
+            throw new ResourceNotFoundExceotion("ACCESS CODE NOT FOUND");
+        }
+        MAI03.setAlreadyUsed(true);
+        return changePasswordRequestRepository.save(MAI03);
+    }
+
+    @Override
+    public CommonResponse<Object> changePasswordUpdate(ChangePassword changePassword) {
         try {
-            final var checkingOtp = temporaryOtpRepository.checkingOtpNumber(changePassword.getAccessCode());
+            final var checkingOtp = changePasswordRequestRepository.findByCode(changePassword.getCode());
             if (checkingOtp == null) {
                 return commonResponseGenerator.failResponse("ACCESS CODE NOT FOUND");
             }
@@ -149,7 +187,13 @@ public class ValidateImpl implements ValidateService{
                 var newPassword = userRepository.checkingAbilityUser(checkingOtp.getEmail());
                 newPassword.setPassword(changePassword.getNewPassword());
                 newPassword.setUpdateAt(new Date(System.currentTimeMillis()));
-                return commonResponseGenerator.successResponse(userRepository.save(newPassword));
+                var OASDO21= userRepository.save(newPassword);
+                Map<String, Object> model = new HashMap<>();
+                model.put("username",  OASDO21.getUsername());
+                model.put("email",  String.valueOf(checkingOtp.getEmail()));
+                model.put("password",  changePassword.getNewPassword());
+                userSendEmail.sendEmailUser(checkingOtp.getEmail(), model);
+                return commonResponseGenerator.successResponse(OASDO21);
             }
             return commonResponseGenerator.failResponse("PASSWORD CONFIRMATION MUST SAME");
         }catch(Exception e) {

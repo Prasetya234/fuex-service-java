@@ -1,5 +1,6 @@
 package com.service.fuex.web.service;
 
+import com.service.fuex.web.exception.ResourceNotFoundExceotion;
 import com.service.fuex.web.model.User;
 import freemarker.template.TemplateException;
 
@@ -9,7 +10,7 @@ import java.util.Map;
 
 public interface UserService {
 
-    List<User> getAll();
+    List<User> getAll(String access) throws ResourceNotFoundExceotion;
 
     Map<String, Boolean> deleteUserById(Long userStatusId);
 

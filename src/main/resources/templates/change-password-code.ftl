@@ -1,30 +1,30 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
+
 <head>
     <title>Sending Email with Freemarker HTML Template Example</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css' />
     <!-- use the font -->
     <style type="css">
-        body {
+    body {
             font-family: 'Roboto', sans-serif;
             font-size: 48px;
         }
     </style>
 </head>
+
 <body style="margin: 0; padding: 0;">
 <div>
     <table align="center" border="0" cellpadding="0" cellspacing="0" width="600" style="border-collapse: collapse;">
         <tr>
             <td bgcolor="#eaeaea" style="padding: 40px 30px 40px 30px;">
-                <p style="color: black;">Hay ${username},</p><br/>
-                <p style="color: black;">This is the <b>email</b> and <b>password</b> to login: </p>
-                <div style="display: flex;">
-                    <p style="font-size: 19px; padding: 0px 30px 0px 30px; text-direction: none; color: black;"><b>${email}</b></p><br/>
-                    <p style="font-size: 19px; padding: 0px 10px 0px 10px;"><b>${password}</b></p><br/>
-                </div>
-                <!-- <p style="color: black; padding: 40px 0px 0px 0px; font-size: 20px; font-weight: bold;">Admin fuex</p> -->
+                <p style="color: black;">Hello everyone,</p><br />
+                <p style="color: black;">This is the request code to change your password: </p>
+                <p style="font-size: 19px; padding: 0px 30px 0px 30px; text-direction: none; color: black;"><b>${yayay}</b></p>
+                <br />
             </td>
         </tr>
         <tr>
@@ -58,4 +58,5 @@
     </table>
 </div>
 </body>
+
 </html>

@@ -25,7 +25,30 @@
     </tr>
     <tr>
         <td bgcolor="#777777" style="padding: 30px 30px 30px 30px; align-items: center;">
-            <p>@Excellent Semarang</p>
+            <!-- START FOOTER -->
+            <div class="footer" style="clear: both; Margin-top: 10px; text-align: center; width: 100%;">
+                <table border="0" cellpadding="0" cellspacing="0"
+                       style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: 100%;">
+                    <tr>
+                        <td class="content-block"
+                            style="font-family: sans-serif; vertical-align: top; padding-bottom: 10px; padding-top: 10px; font-size: 12px; color: #cfc7c7; text-align: center;">
+                  <span class="apple-link" style="color: #cfc7c7; font-size: 12px; text-align: center;">Company Inc, Jl.
+                    Bulustalan I No.27, Kota Semarang, Jawa Tengah 50245</span>
+                            <br /> visit our shop <a href="https://www.excellentcom.id/"
+                                                     style="text-decoration: underline; color: #cfc7c7; font-size: 12px; text-align: center;">Subscribe</a>.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="content-block powered-by"
+                            style="font-family: sans-serif; vertical-align: top; padding-bottom: 10px; padding-top: 10px; font-size: 12px; color: #cfc7c7; text-align: center;">
+                            Powered by <a href="http://htmlemail.io"
+                                          style="color: #cfc7c7; font-size: 12px; text-align: center; text-decoration: none;">Excellent
+                            Computer Semarang</a>.
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <!-- END FOOTER -->
         </td>
     </tr>
 </table>

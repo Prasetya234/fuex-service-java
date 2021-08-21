@@ -1,5 +1,6 @@
 package com.service.fuex.web.service;
 
+import com.service.fuex.web.exception.ResourceNotFoundExceotion;
 import com.service.fuex.web.model.Vocher;
 import com.service.fuex.web.repository.VocherRepository;
 import com.service.fuex.web.response.CommonResponse;
@@ -7,6 +8,7 @@ import com.service.fuex.web.response.CommonResponseGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,7 +24,22 @@ public class VocherImpl implements VocherService {
 
     @Override
     public List<Vocher> getAll() {
-        return vocherRepository.findAll();
+        var result = vocherRepository.findAll();
+        for (Vocher b: result) {
+            if (b.getExpiredDate().getTime() < new Date(System.currentTimeMillis()).getTime()) {
+                vocherRepository.deleteById(b.getVocherId());
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public Vocher getCode(String code) throws ResourceNotFoundExceotion {
+        var NAO29 = vocherRepository.findByCode(code);
+        if (NAO29 == null) {
+            throw new ResourceNotFoundExceotion("VOCHER CODE NOT FOUND");
+        }
+        return NAO29;
     }
 
     @Override

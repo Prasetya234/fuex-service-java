@@ -1,33 +1,33 @@
 package com.service.fuex.web.model;
 
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 public class ChangePassword {
 
-    @NotBlank
-    private String accessCode;
+    @NotNull
+    private String code;
 
-    @NotBlank
+    @NotNull
     private String newPassword;
 
-    @NotBlank
+    @NotNull
     private String confirmPassword;
 
     public ChangePassword() {
     }
 
-    public ChangePassword(String accessCode, String newPassword, String confirmPassword) {
-        this.accessCode = accessCode;
+    public ChangePassword(String code, String newPassword, String confirmPassword) {
         this.newPassword = newPassword;
         this.confirmPassword = confirmPassword;
+        this.code = code;
     }
 
-    public String getAccessCode() {
-        return accessCode;
+    public String getCode() {
+        return code;
     }
 
-    public void setAccessCode(String accessCode) {
-        this.accessCode = accessCode;
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getNewPassword() {

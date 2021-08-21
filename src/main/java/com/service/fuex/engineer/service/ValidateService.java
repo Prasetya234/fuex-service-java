@@ -2,13 +2,13 @@ package com.service.fuex.engineer.service;
 
 import com.service.fuex.web.exception.ResourceNotFoundExceotion;
 import com.service.fuex.web.model.ChangePassword;
+import com.service.fuex.web.model.ChangePasswordRequest;
 import com.service.fuex.web.model.TemporaryOtp;
 import com.service.fuex.web.model.User;
 import com.service.fuex.web.response.CommonResponse;
 import freemarker.template.TemplateException;
 
 import javax.mail.MessagingException;
-import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 public interface ValidateService {
@@ -20,5 +20,9 @@ public interface ValidateService {
 
     CommonResponse<TemporaryOtp> checkingOtp(String otpNumber,String email);
 
-    Object requestChangePassword(ChangePassword changePassword);
+    ChangePasswordRequest changePasswordRequest(String email) throws ResourceNotFoundExceotion, TemplateException, MessagingException, IOException;
+
+    ChangePasswordRequest checkingCode(String code) throws ResourceNotFoundExceotion;
+
+    Object changePasswordUpdate(ChangePassword changePassword);
 }

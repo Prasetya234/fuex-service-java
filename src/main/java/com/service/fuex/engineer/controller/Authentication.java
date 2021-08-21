@@ -4,6 +4,7 @@ import com.service.fuex.engineer.service.ValidateImpl;
 import com.service.fuex.web.dto.UserDTO;
 import com.service.fuex.web.exception.ResourceNotFoundExceotion;
 import com.service.fuex.web.model.ChangePassword;
+import com.service.fuex.web.model.ChangePasswordRequest;
 import com.service.fuex.web.model.TemporaryOtp;
 import com.service.fuex.web.model.User;
 import com.service.fuex.web.response.CommonResponse;
@@ -62,10 +63,28 @@ public class Authentication {
         }
     }
 
-    @RequestMapping(value = "/change-password", method = RequestMethod.PUT)
-    public CommonResponse<UserDTO> changePasswordUpdate(@RequestBody @Valid ChangePassword changePassword) {
+    @RequestMapping(value = "/change-password/request", method = RequestMethod.GET)
+    public CommonResponse<ChangePasswordRequest> changePasswordRequest(@RequestHeader(value = "email") String email) {
         try {
-            return commonResponseGenerator.successResponse(validateService.requestChangePassword(changePassword));
+            return commonResponseGenerator.successResponse(validateService.changePasswordRequest(email));
+        } catch (Exception e) {
+            return commonResponseGenerator.failResponse(e.getMessage());
+        }
+    }
+
+    @RequestMapping(value = "/change-password/valid-code", method = RequestMethod.GET)
+    public CommonResponse<ChangePasswordRequest> valid(@RequestHeader(value = "code") String code) {
+        try {
+            return commonResponseGenerator.successResponse(validateService.checkingCode(code));
+        } catch (Exception e) {
+            return commonResponseGenerator.failResponse(e.getMessage());
+        }
+    }
+
+    @RequestMapping(value = "/change-password", method = RequestMethod.PUT)
+    public CommonResponse<User> changePasswordUpdate(@RequestBody @Valid ChangePassword changePassword) {
+        try {
+            return commonResponseGenerator.successResponse(validateService.changePasswordUpdate(changePassword));
         } catch (Exception e) {
             return commonResponseGenerator.failResponse(e.getMessage());
         }

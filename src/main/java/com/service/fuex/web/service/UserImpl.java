@@ -1,5 +1,6 @@
 package com.service.fuex.web.service;
 
+import com.service.fuex.web.exception.ResourceNotFoundExceotion;
 import com.service.fuex.web.model.User;
 import com.service.fuex.web.repository.UserRepository;
 import freemarker.template.Configuration;
@@ -23,8 +24,11 @@ public class UserImpl implements  UserService{
     private Configuration config;
 
     @Override
-    public List<User> getAll() {
-        return userRepository.findAll();
+    public List<User> getAll(String access) throws ResourceNotFoundExceotion {
+      if (access.equals("FUEX")) {
+          return userRepository.findAll();
+      }
+      throw  new ResourceNotFoundExceotion("ACCESS BLOCKED");
     }
 
     @Override
