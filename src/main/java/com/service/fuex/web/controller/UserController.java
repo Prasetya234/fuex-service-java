@@ -1,6 +1,7 @@
 package com.service.fuex.web.controller;
 
 import com.service.fuex.web.dto.UserDTO;
+import com.service.fuex.web.model.User;
 import com.service.fuex.web.response.CommonResponse;
 import com.service.fuex.web.response.CommonResponseGenerator;
 import com.service.fuex.web.service.UserImpl;
@@ -35,16 +36,20 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public CommonResponse<Map<String, Boolean>> deleteUser(@PathVariable(value = "id") Long userId) {
+    public CommonResponse<Map<String, Boolean>> deleteUser(@PathVariable(value = "id") Long userId, @RequestHeader String access) {
         try {
-            return commonResponseGenerator.successResponse(userService.deleteUserById(userId));
+            return commonResponseGenerator.successResponse(userService.deleteUserById(userId, access));
         } catch (Exception e) {
             return   commonResponseGenerator.failResponse(e.getMessage());
         }
     }
 
     @GetMapping("/access/{id}")
-    public String getUser(@PathVariable(value = "id") Long userId) throws TemplateException, IOException {
-        return userService.getUserById(userId);
+    public CommonResponse<User> getUser(@PathVariable Long id, @RequestHeader String access) {
+        try {
+            return commonResponseGenerator.successResponse(userService.getUserById(id, access));
+        } catch (Exception e) {
+            return  commonResponseGenerator.failResponse(e.getMessage());
+        }
     }
 }

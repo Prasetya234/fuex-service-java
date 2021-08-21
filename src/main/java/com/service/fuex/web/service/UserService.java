@@ -12,7 +12,7 @@ public interface UserService {
 
     List<User> getAll(String access) throws ResourceNotFoundExceotion;
 
-    Map<String, Boolean> deleteUserById(Long userStatusId);
+    Map<String, Boolean> deleteUserById(Long userStatusId, String access) throws ResourceNotFoundExceotion;
 
-    String getUserById(Long userId) throws TemplateException, IOException;
+    User getUserById(Long userId, String access) throws ResourceNotFoundExceotion;
 }

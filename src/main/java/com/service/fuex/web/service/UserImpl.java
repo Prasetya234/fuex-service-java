@@ -32,20 +32,25 @@ public class UserImpl implements  UserService{
     }
 
     @Override
-    public Map<String, Boolean> deleteUserById(Long userId) {
-        userRepository.deleteById(userId);
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("DELETED", Boolean.TRUE);
-        return response;
+    public Map<String, Boolean> deleteUserById(Long userId, String access) throws ResourceNotFoundExceotion {
+        if (access.equals("FUEX")) {
+            userRepository.deleteById(userId);
+            Map<String, Boolean> response = new HashMap<>();
+            response.put("DELETED", Boolean.TRUE);
+            return response;
+        }
+        throw  new ResourceNotFoundExceotion("ACCESS BLOCKED");
     }
 
     @Override
-    public String getUserById(Long userId) throws TemplateException, IOException {
-        var user = userRepository.findById(userId).get();
-        var somuch = userRepository.save(user);
-        Map<String, Object> templates = new HashMap<>();
-        templates.put("username",  somuch.getUsername());
-        Template t = config.getTemplate("template-access.ftl");
-        return FreeMarkerTemplateUtils.processTemplateIntoString(t, templates);
+    public User getUserById(Long userId, String access) throws ResourceNotFoundExceotion {
+        if (access.equals("FUEX")) {
+            var user = userRepository.findById(userId).get();
+            if (user == null) {
+                throw new ResourceNotFoundExceotion("USER ID NOT FOUND");
+            }
+            return user;
+        }
+        throw  new ResourceNotFoundExceotion("ACCESS BLOCKED");
     }
 }
