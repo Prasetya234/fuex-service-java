@@ -177,7 +177,7 @@ public class ValidateImpl implements ValidateService{
     }
 
     @Override
-    public CommonResponse<Object> changePasswordUpdate(ChangePassword changePassword) {
+    public Object changePasswordUpdate(ChangePassword changePassword) {
         try {
             final var checkingOtp = changePasswordRequestRepository.findByCode(changePassword.getCode());
             if (checkingOtp == null) {
@@ -193,7 +193,7 @@ public class ValidateImpl implements ValidateService{
                 model.put("email",  String.valueOf(checkingOtp.getEmail()));
                 model.put("password",  changePassword.getNewPassword());
                 userSendEmail.sendEmailUser(checkingOtp.getEmail(), model);
-                return commonResponseGenerator.successResponse(OASDO21);
+                return OASDO21;
             }
             return commonResponseGenerator.failResponse("PASSWORD CONFIRMATION MUST SAME");
         }catch(Exception e) {

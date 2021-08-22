@@ -1,6 +1,6 @@
 package com.service.fuex.web.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -11,48 +11,81 @@ import java.util.Date;
 @Table(name = "orderes")
 public class Order {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "atas_nama", nullable = false)
     private String atasNama;
 
+    @Column(name = "no_telpon", nullable = false)
     private String noTelpon;
 
+    @Column(name = "alamat", nullable = false)
     private String alamat;
 
+    @Column(name = "merek", nullable = false)
     private String merek;
 
+    @Column(name = "number_plat", nullable = false)
     private String numberPlat;
 
+    @Column(name = "per_liter", nullable = false)
     private Integer perLiter;
 
+    @Column(name = "kode_vocher", nullable = false)
     private String kodeVocher;
 
+    @Column(name = "total_pembayaran", nullable = false)
     private Integer totalPembayaran;
 
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "create_date", nullable = false)
     private Date createDate;
 
+    @Column(name = "is_emergency", nullable = false)
     private Boolean isEmergency;
 
-    private String user;
+    @Column(name = "users", nullable = false)
+    private String users;
 
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @JoinColumn(name = "user_id")
+//    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private User userId;
 
+    @Column(name = "vehicle_type", nullable = false)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String vehicleType;
 
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @JoinColumn(name = "vehicle_type_id", nullable = false)
+//    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private VehicleType vehicleTypeId;
 
+    @Column(name = "fuel_type", nullable = false)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String fuelType;
 
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @JoinColumn(name = "fuel_type_id", nullable = false)
+//    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private FuelType fuelTypeId;
 
+    @Column(name = "order_status", nullable = false)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String orderStatus;
 
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @JoinColumn(name = "order_status_id", nullable = false)
+//    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private OrderStatus orderStatusId;
 
     public Order() {
     }
 
-    public Order(String atasNama, String noTelpon, String alamat, String merek, String numberPlat, Integer perLiter, String kodeVocher, Integer totalPembayaran, Boolean isEmergency, String user, String vehicleType, String fuelType, String orderStatus) {
+    public Order(String atasNama, String noTelpon, String alamat, String merek, String numberPlat, Integer perLiter, String kodeVocher, Integer totalPembayaran, Boolean isEmergency, String users, String vehicleType, String fuelType, String orderStatus) {
         this.atasNama = atasNama;
         this.noTelpon = noTelpon;
         this.alamat = alamat;
@@ -62,14 +95,12 @@ public class Order {
         this.kodeVocher = kodeVocher;
         this.totalPembayaran = totalPembayaran;
         this.isEmergency = isEmergency;
-        this.user = user;
+        this.users = users;
         this.vehicleType = vehicleType;
         this.fuelType = fuelType;
         this.orderStatus = orderStatus;
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long getId() {
         return id;
     }
@@ -78,7 +109,6 @@ public class Order {
         this.id = id;
     }
 
-    @Column(name = "atas_nama", nullable = false)
     public String getAtasNama() {
         return atasNama;
     }
@@ -87,7 +117,6 @@ public class Order {
         this.atasNama = atasNama;
     }
 
-    @Column(name = "no_telpon", nullable = false)
     public String getNoTelpon() {
         return noTelpon;
     }
@@ -96,7 +125,6 @@ public class Order {
         this.noTelpon = noTelpon;
     }
 
-    @Column(name = "alamat", nullable = false)
     public String getAlamat() {
         return alamat;
     }
@@ -105,7 +133,6 @@ public class Order {
         this.alamat = alamat;
     }
 
-    @Column(name = "merek", nullable = false)
     public String getMerek() {
         return merek;
     }
@@ -114,7 +141,6 @@ public class Order {
         this.merek = merek;
     }
 
-    @Column(name = "number_plat", nullable = false)
     public String getNumberPlat() {
         return numberPlat;
     }
@@ -123,7 +149,6 @@ public class Order {
         this.numberPlat = numberPlat;
     }
 
-    @Column(name = "per_liter", nullable = false)
     public Integer getPerLiter() {
         return perLiter;
     }
@@ -132,7 +157,6 @@ public class Order {
         this.perLiter = perLiter;
     }
 
-    @Column(name = "kode_vocher", nullable = false)
     public String getKodeVocher() {
         return kodeVocher;
     }
@@ -141,7 +165,6 @@ public class Order {
         this.kodeVocher = kodeVocher;
     }
 
-    @Column(name = "total_pembayaran", nullable = false)
     public Integer getTotalPembayaran() {
         return totalPembayaran;
     }
@@ -150,9 +173,6 @@ public class Order {
         this.totalPembayaran = totalPembayaran;
     }
 
-    @CreationTimestamp
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "create_date", nullable = false)
     public Date getCreateDate() {
         return createDate;
     }
@@ -161,7 +181,6 @@ public class Order {
         this.createDate = createDate;
     }
 
-    @Column(name = "is_emergency", nullable = false)
     public Boolean getEmergency() {
         return isEmergency;
     }
@@ -170,18 +189,14 @@ public class Order {
         isEmergency = emergency;
     }
 
-    @Column(name = "user", nullable = false)
-    public String getUser() {
-        return user;
+    public String getUsers() {
+        return users;
     }
 
-    public void setUser(String user) {
-        this.user = user;
+    public void setUsers(String users) {
+        this.users = users;
     }
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-    @JoinColumn(name = "user_id", nullable = false)
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     public User getUserId() {
         return userId;
     }
@@ -190,8 +205,6 @@ public class Order {
         this.userId = userId;
     }
 
-    @Column(name = "vehicle_type", nullable = false)
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     public String getVehicleType() {
         return vehicleType;
     }
@@ -200,9 +213,6 @@ public class Order {
         this.vehicleType = vehicleType;
     }
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-    @JoinColumn(name = "vehicle_type_id", nullable = false)
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     public VehicleType getVehicleTypeId() {
         return vehicleTypeId;
     }
@@ -211,8 +221,6 @@ public class Order {
         this.vehicleTypeId = vehicleTypeId;
     }
 
-    @Column(name = "fuel_type", nullable = false)
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     public String getFuelType() {
         return fuelType;
     }
@@ -221,9 +229,6 @@ public class Order {
         this.fuelType = fuelType;
     }
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-    @JoinColumn(name = "fuel_type_id", nullable = false)
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     public FuelType getFuelTypeId() {
         return fuelTypeId;
     }
@@ -232,8 +237,6 @@ public class Order {
         this.fuelTypeId = fuelTypeId;
     }
 
-    @Column(name = "order_status", nullable = false)
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     public String getOrderStatus() {
         return orderStatus;
     }
@@ -242,9 +245,6 @@ public class Order {
         this.orderStatus = orderStatus;
     }
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-    @JoinColumn(name = "order_status_id", nullable = false)
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     public OrderStatus getOrderStatusId() {
         return orderStatusId;
     }
@@ -254,7 +254,7 @@ public class Order {
     }
 
     @Override
-    public String toString() {
+    public String   toString() {
         return "Order{" +
                 "id=" + id +
                 ", atasNama='" + atasNama + '\'' +
@@ -267,7 +267,7 @@ public class Order {
                 ", totalPembayaran=" + totalPembayaran +
                 ", createDate=" + createDate +
                 ", isEmergency=" + isEmergency +
-                ", user='" + user + '\'' +
+                ", users='" + users + '\'' +
                 ", userId=" + userId +
                 ", vehicleType='" + vehicleType + '\'' +
                 ", vehicleTypeId=" + vehicleTypeId +

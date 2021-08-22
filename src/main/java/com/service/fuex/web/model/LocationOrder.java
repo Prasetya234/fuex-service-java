@@ -3,7 +3,7 @@ package com.service.fuex.web.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "Location")
+@Table(name = "location")
 public class LocationOrder {
 
     private Long id;

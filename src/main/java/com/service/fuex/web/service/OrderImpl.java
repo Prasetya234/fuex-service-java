@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-@Transactional
 public class OrderImpl implements OrderService {
 
     @Autowired
@@ -28,7 +27,7 @@ public class OrderImpl implements OrderService {
 
     @Override
     public List<Order> getOrderUserById(Long orderId) {
-        return orderRepository.findByUserId(orderId);
+        return null;
     }
 
     @Override
