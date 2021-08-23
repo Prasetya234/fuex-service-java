@@ -33,33 +33,34 @@ public class OrderImpl implements OrderService {
     @Autowired
     private OrderRepository orderRepository;
 
-    @Autowired
-    private CommonResponseGenerator commonResponseGenerator;
-
     @Override
     public List<Order> getAll() {
         return orderRepository.findAll();
     }
 
     @Override
-    public List<Order> getOrderUserById(Long orderId) {
-        return null;
+    public List<Order> getOrderUserById(String user) throws ResourceNotFoundExceotion {
+        var LMSKA02 = orderRepository.findByUsers(user);
+        if (String.valueOf(LMSKA02).equals("[]")) {
+            throw new ResourceNotFoundExceotion("User Belum Melakukan Transaksi");
+        }
+        return LMSKA02;
     }
 
     private Integer transactionConfirmation(Integer biayaLayanan, Integer liter, Integer discount, Integer fuelBuy, String code) throws ResourceNotFoundExceotion {
         var LS23AFN = vocherRepository.findByCode(code);
         if (LS23AFN.getExpiredDate().getTime() < new Date().getTime()) {
-            throw new ResourceNotFoundExceotion("VOUCHER HAS EXPIRED");
+            throw new ResourceNotFoundExceotion("Kode Vocher sudah kadaluarsa");
         }
         LS23AFN.setInUseCount(LS23AFN.getInUseCount() - 1);
         if (LS23AFN.getInUseCount() < 0) {
-            throw new ResourceNotFoundExceotion("THE USE OF THE VOUCHER HAS EXCEEDED THE LIMIT");
+            throw new ResourceNotFoundExceotion("Kode Vocher Telah Habis Di Gunakan");
         }
         vocherRepository.save(LS23AFN);
         int harga = liter * fuelBuy;
         int discounts = harga - discount;
         if (discounts < 0) {
-            throw new ResourceNotFoundExceotion("TRANSACTIONS CANNOT BE NEGATIVE");
+            throw new ResourceNotFoundExceotion("Nilai Transaksi anda tidak boleh dibawah 0 Rupiah");
         }
         return discounts += biayaLayanan;
     }
@@ -86,7 +87,7 @@ public class OrderImpl implements OrderService {
             createOrder.setFuelTypeId(MLADS29FT);
             var yyy = MLADS29FT.getCapacity() - Integer.parseInt(order.getLiter());
             if (yyy < 0) {
-                throw new ResourceNotFoundExceotion(MLADS29FT.getTipeBensin() + " left " + MLADS29FT.getCapacity() + " liter" );
+                throw new ResourceNotFoundExceotion(MLADS29FT.getTipeBensin() + " Hanya Tersisa" + MLADS29FT.getCapacity() + " Liter" );
             }
             MLADS29FT.setCapacity(yyy);
             fuelTypeRepository.save(MLADS29FT);
@@ -118,6 +119,53 @@ public class OrderImpl implements OrderService {
     @Override
     public Order update(Long id, Order order) {
         return null;
+    }
+
+    // 4 CANCLE
+    // 3 DONE
+    // 2 ON THE WAY
+    // 1 waiting for confirmation
+
+    @Override
+    public Order statusOtw(Long id) throws ResourceNotFoundExceotion {
+        var MASID72 = orderRepository.findById(id).orElseThrow(() -> new ResourceNotFoundExceotion("Order ID Not Found"));
+        if (MASID72.getOrderStatus().equals("3")) {
+            throw new ResourceNotFoundExceotion("ORDER DETAIL TIDAK BISA DI SELESAIKAN KARENA SUDAH SELESAI");
+        }
+        if (MASID72.getOrderStatus().equals("4")) {
+            throw new ResourceNotFoundExceotion("ORDER DETAIL TIDAK BISA DI SELESAIKAN KARENA STATUS DIBATALKAN");
+        }
+        MASID72.setOrderStatus("2");
+        MASID72.setOrderStatusId(orderStatusRepository.findById(Long.valueOf(MASID72.getOrderStatus())).orElseThrow(() -> new ResourceNotFoundExceotion("Order Status Id Not Found")));
+        return orderRepository.save(MASID72);
+    }
+
+    @Override
+    public Order statusDone(Long id) throws ResourceNotFoundExceotion {
+        var MASID72 = orderRepository.findById(id).orElseThrow(() -> new ResourceNotFoundExceotion("Order ID Not Found"));
+        if (MASID72.getOrderStatus().equals("1")) {
+            throw new ResourceNotFoundExceotion("ORDER DETAIL TIDAK BISA DI SELESAIKAN KARENA STATUS SEDANG MENUNGGU KONFIRMASI");
+        }
+        if (MASID72.getOrderStatus().equals("4")) {
+            throw new ResourceNotFoundExceotion("ORDER DETAIL TIDAK BISA DI SELESAIKAN KARENA STATUS DIBATALKAN");
+        }
+        MASID72.setOrderStatus("3");
+        MASID72.setOrderStatusId(orderStatusRepository.findById(Long.valueOf(MASID72.getOrderStatus())).orElseThrow(() -> new ResourceNotFoundExceotion("Order Status Id Not Found")));
+        return orderRepository.save(MASID72);
+    }
+
+    @Override
+    public Order statusCancle(Long id) throws ResourceNotFoundExceotion {
+        var MASID72 = orderRepository.findById(id).orElseThrow(() -> new ResourceNotFoundExceotion("Order ID Not Found"));
+        if (MASID72.getOrderStatus().equals("2")) {
+            throw new ResourceNotFoundExceotion("ORDER DETAIL TIDAK BISA DI SELESAIKAN KARENA SEDANG DALAM PERJALANAN");
+        }
+        if (MASID72.getOrderStatus().equals("3")) {
+            throw new ResourceNotFoundExceotion("ORDER DETAIL TIDAK BISA DI SELESAIKAN KARENA STATUS DIBATALKAN");
+        }
+        MASID72.setOrderStatus("4");
+        MASID72.setOrderStatusId(orderStatusRepository.findById(Long.valueOf(MASID72.getOrderStatus())).orElseThrow(() -> new ResourceNotFoundExceotion("Order Status Id Not Found")));
+        return orderRepository.save(MASID72);
     }
 
     @Override

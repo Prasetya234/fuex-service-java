@@ -9,11 +9,17 @@ import java.util.Map;
 public interface OrderService {
     List<Order> getAll();
 
-    List<Order> getOrderUserById(Long orderId);
+    List<Order> getOrderUserById(String user) throws ResourceNotFoundExceotion;
 
     Order create(Order order) throws ResourceNotFoundExceotion;
 
     Order update(Long id, Order order);
+
+    Order statusOtw(Long id) throws ResourceNotFoundExceotion;
+
+    Order statusDone(Long id) throws  ResourceNotFoundExceotion;
+
+    Order statusCancle(Long id) throws ResourceNotFoundExceotion;
 
     Map<String, Boolean> delete(Long id);
 }

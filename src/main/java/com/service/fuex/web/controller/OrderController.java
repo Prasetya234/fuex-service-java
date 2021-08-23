@@ -34,6 +34,15 @@ public class OrderController {
         }
     }
 
+    @GetMapping("/user")
+    public CommonResponse<Order> getUseId(@RequestParam("userId") String userId) {
+        try {
+            return commonResponseGenerator.successResponse(orderService.getOrderUserById(userId));
+        }catch(Exception e) {
+            return commonResponseGenerator.failResponse(e.getMessage());
+        }
+    }
+
     @PostMapping("/")
     public  CommonResponse<OrderDTO> create(@RequestBody @Valid OrderDTO order) {
         try {
@@ -43,4 +52,42 @@ public class OrderController {
             return commonResponseGenerator.failResponse(e.getMessage());
         }
     }
+
+    @PatchMapping("/status-otw/{id}")
+        public CommonResponse<Order> statusOtw(@PathVariable Long id) {
+            try {
+                return commonResponseGenerator.successResponse(orderService.statusOtw(id));
+            } catch (Exception e) {
+                return commonResponseGenerator.failResponse(e.getMessage());
+        }
+    }
+
+    @PatchMapping("/status-done/{id}")
+    public CommonResponse<Order> statusDone(@PathVariable Long id) {
+        try {
+            return commonResponseGenerator.successResponse(orderService.statusDone(id));
+        } catch (Exception e) {
+            return commonResponseGenerator.failResponse(e.getMessage());
+        }
+    }
+
+    @PatchMapping("/status-cancle/{id}")
+    public CommonResponse<Order> statusCancle(@PathVariable Long id) {
+        try {
+            return commonResponseGenerator.successResponse(orderService.statusCancle(id));
+        } catch (Exception e) {
+            return commonResponseGenerator.failResponse(e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public CommonResponse<Order> delete(@PathVariable Long id) {
+        try {
+            return commonResponseGenerator.successResponse(orderService.delete(id));
+        } catch (Exception e) {
+            return commonResponseGenerator.failResponse(e.getMessage());
+        }
+    }
+
+
 }
