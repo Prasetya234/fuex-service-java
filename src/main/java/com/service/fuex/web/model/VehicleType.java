@@ -1,6 +1,7 @@
 package com.service.fuex.web.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -41,6 +42,7 @@ public class VehicleType {
     }
 
     @OneToMany(mappedBy = "vehicleType", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     public Set<FuelType> getFuelTypeId() {
         return fuelTypeId;
     }

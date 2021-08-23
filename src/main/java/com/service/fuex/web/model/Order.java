@@ -83,6 +83,7 @@ public class Order {
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "vocher_id")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Vocher vocherId;
 
     @Column(name = "order_status")
