@@ -4,44 +4,40 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 public class OrderDTO {
-    @NotBlank(message = "ATAS NAMA CANNOT EMPTY")
+//    @NotBlank(message = "ATAS NAMA CANNOT EMPTY")
     private String atasNama;
 
-    @NotBlank(message = "NO TELPON CANNOT EMPTY")
+//    @NotBlank(message = "NO TELPON CANNOT EMPTY")
     private String noTelpon;
 
-    @NotBlank(message = "ALAMAT CANNOT EMPTY")
-    private String Alamat;
+//    @NotBlank(message = "ALAMAT CANNOT EMPTY")
+    private String alamat;
 
-    @NotBlank(message = "MEREK CANNOT EMPTY")
+//    @NotBlank(message = "MEREK CANNOT EMPTY")
     private String merek;
 
-    @NotBlank(message = "NUMBER PLAT CANNOT EMPTY")
+//    @NotBlank(message = "NUMBER PLAT CANNOT EMPTY")
     private String numberPlat;
 
-    @NotNull(message = "PERLITER CANNOT EMPTY")
-    private Integer perLiter;
+//    @NotNull(message = "LITER CANNOT EMPTY")
+    private String liter;
 
-    @NotBlank(message = "KODE VOCHER CANNOT EMPTY")
-    private String kodeVocher;
+    private String vocher;
 
-    @NotNull(message = "TOTAL PEMBAYARAN CANNOT EMPTY")
-    private Integer totalPembayaran;
-
-    @NotNull(message = "EMERGENCY CANNOT EMPTY")
+//    @NotNull(message = "EMERGENCY CANNOT EMPTY")
     private Boolean isEmergency;
 
-    @NotBlank(message = "USER CANNOT EMPTY")
-    private String user;
+//    @NotBlank(message = "USER CANNOT EMPTY")
+    private String users;
 
-    @NotBlank(message = "VEHICLE TYPE CANNOT EMPTY")
+//    @NotBlank(message = "VEHICLE TYPE CANNOT EMPTY")
     private String vehicleType;
 
-    @NotBlank(message = "FUEL TYPE CANNOT EMPTY")
-    private String fuelType;
+//    @NotBlank(message = "BIAYA LAYANAN CANNOT EMPTY")
+    private Integer biayaLayanan;
 
-    @NotBlank(message = "ORDER STATUS CANNOT EMPTY")
-    private String orderStatus;
+//    @NotBlank(message = "FUEL TYPE CANNOT EMPTY")
+    private String fuelType;
 
     public String getAtasNama() {
         return atasNama;
@@ -60,11 +56,11 @@ public class OrderDTO {
     }
 
     public String getAlamat() {
-        return Alamat;
+        return alamat;
     }
 
     public void setAlamat(String alamat) {
-        Alamat = alamat;
+        this.alamat = alamat;
     }
 
     public String getMerek() {
@@ -83,28 +79,20 @@ public class OrderDTO {
         this.numberPlat = numberPlat;
     }
 
-    public Integer getPerLiter() {
-        return perLiter;
+    public String getLiter() {
+        return liter;
     }
 
-    public void setPerLiter(Integer perLiter) {
-        this.perLiter = perLiter;
+    public void setLiter(String liter) {
+        this.liter = liter;
     }
 
-    public String getKodeVocher() {
-        return kodeVocher;
+    public String getVocher() {
+        return vocher;
     }
 
-    public void setKodeVocher(String kodeVocher) {
-        this.kodeVocher = kodeVocher;
-    }
-
-    public Integer getTotalPembayaran() {
-        return totalPembayaran;
-    }
-
-    public void setTotalPembayaran(Integer totalPembayaran) {
-        this.totalPembayaran = totalPembayaran;
+    public void setVocher(String vocher) {
+        this.vocher = vocher;
     }
 
     public Boolean getEmergency() {
@@ -115,12 +103,20 @@ public class OrderDTO {
         isEmergency = emergency;
     }
 
-    public String getUser() {
-        return user;
+    public String getUsers() {
+        return users;
     }
 
-    public void setUser(String user) {
-        this.user = user;
+    public void setUsers(String users) {
+        this.users = users;
+    }
+
+    public Integer getBiayaLayanan() {
+        return biayaLayanan;
+    }
+
+    public void setBiayaLayanan(Integer biayaLayanan) {
+        this.biayaLayanan = biayaLayanan;
     }
 
     public String getVehicleType() {
@@ -137,13 +133,5 @@ public class OrderDTO {
 
     public void setFuelType(String fuelType) {
         this.fuelType = fuelType;
-    }
-
-    public String getOrderStatus() {
-        return orderStatus;
-    }
-
-    public void setOrderStatus(String orderStatus) {
-        this.orderStatus = orderStatus;
     }
 }

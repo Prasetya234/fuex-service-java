@@ -1,5 +1,6 @@
 package com.service.fuex.web.service;
 
+import com.service.fuex.web.exception.ResourceNotFoundExceotion;
 import com.service.fuex.web.model.Order;
 
 import java.util.List;
@@ -10,7 +11,7 @@ public interface OrderService {
 
     List<Order> getOrderUserById(Long orderId);
 
-    Order create(Order order);
+    Order create(Order order) throws ResourceNotFoundExceotion;
 
     Order update(Long id, Order order);
 

@@ -21,7 +21,8 @@ public class Vocher {
     public Vocher() {
     }
 
-    public Vocher(String code, String image, Date expiredDate, Integer discount) {
+    public Vocher(String code, String image, Date expiredDate, Integer discount, Integer inUseCount) {
+        this.inUseCount = inUseCount;
         this.expiredDate = expiredDate;
         this.code = code;
         this.image = image;

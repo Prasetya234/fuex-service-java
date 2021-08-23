@@ -1,6 +1,7 @@
 package com.service.fuex.web.model;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -15,90 +16,100 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "atas_nama", nullable = false)
+    @Column(name = "atas_nama")
     private String atasNama;
 
-    @Column(name = "no_telpon", nullable = false)
+    @Column(name = "no_telpon")
     private String noTelpon;
 
-    @Column(name = "alamat", nullable = false)
+    @Column(name = "alamat")
     private String alamat;
 
-    @Column(name = "merek", nullable = false)
+    @Column(name = "merek")
     private String merek;
 
-    @Column(name = "number_plat", nullable = false)
+    @Column(name = "number_plat")
     private String numberPlat;
 
-    @Column(name = "per_liter", nullable = false)
-    private Integer perLiter;
+    @Column(name = "liter")
+    private String liter;
 
-    @Column(name = "kode_vocher", nullable = false)
-    private String kodeVocher;
+    @Column(name = "biaya_layanan")
+    private String biayaLayanan;
 
-    @Column(name = "total_pembayaran", nullable = false)
+    @Column(name = "total_pembayaran")
     private Integer totalPembayaran;
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "create_date", nullable = false)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Jakarta")
+    @Column(name = "create_date")
     private Date createDate;
 
-    @Column(name = "is_emergency", nullable = false)
+    @Column(name = "is_emergency")
     private Boolean isEmergency;
 
-    @Column(name = "users", nullable = false)
+    @Column(name = "users")
     private String users;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "user_id")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 //    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private User userId;
 
-    @Column(name = "vehicle_type", nullable = false)
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @Column(name = "vehicle_type")
+//    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String vehicleType;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-    @JoinColumn(name = "vehicle_type_id", nullable = false)
+    @JoinColumn(name = "vehicle_type_id")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 //    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private VehicleType vehicleTypeId;
 
-    @Column(name = "fuel_type", nullable = false)
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @Column(name = "fuel_type")
+//    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String fuelType;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-    @JoinColumn(name = "fuel_type_id", nullable = false)
+    @JoinColumn(name = "fuel_type_id")
 //    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private FuelType fuelTypeId;
 
-    @Column(name = "order_status", nullable = false)
+    @Column(name = "vocher")
+    private String vocher;
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @JoinColumn(name = "vocher_id")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private Vocher vocherId;
+
+    @Column(name = "order_status")
+//    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String orderStatus;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-    @JoinColumn(name = "order_status_id", nullable = false)
+    @JoinColumn(name = "order_status_id")
 //    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private OrderStatus orderStatusId;
 
     public Order() {
     }
 
-    public Order(String atasNama, String noTelpon, String alamat, String merek, String numberPlat, Integer perLiter, String kodeVocher, Integer totalPembayaran, Boolean isEmergency, String users, String vehicleType, String fuelType, String orderStatus) {
+    public Order(String atasNama, String noTelpon, String alamat, String merek, String numberPlat, String liter, Boolean isEmergency, String vocher, String users, String vehicleType, String fuelType, String biayaLayanan) {
         this.atasNama = atasNama;
         this.noTelpon = noTelpon;
         this.alamat = alamat;
         this.merek = merek;
         this.numberPlat = numberPlat;
-        this.perLiter = perLiter;
-        this.kodeVocher = kodeVocher;
-        this.totalPembayaran = totalPembayaran;
+        this.biayaLayanan = biayaLayanan;
+        this.vocher = vocher;
+        this.liter = liter;
         this.isEmergency = isEmergency;
         this.users = users;
         this.vehicleType = vehicleType;
         this.fuelType = fuelType;
-        this.orderStatus = orderStatus;
     }
 
     public Long getId() {
@@ -149,20 +160,20 @@ public class Order {
         this.numberPlat = numberPlat;
     }
 
-    public Integer getPerLiter() {
-        return perLiter;
+    public String getLiter() {
+        return liter;
     }
 
-    public void setPerLiter(Integer perLiter) {
-        this.perLiter = perLiter;
+    public void setLiter(String liter) {
+        this.liter = liter;
     }
 
-    public String getKodeVocher() {
-        return kodeVocher;
+    public String getBiayaLayanan() {
+        return biayaLayanan;
     }
 
-    public void setKodeVocher(String kodeVocher) {
-        this.kodeVocher = kodeVocher;
+    public void setBiayaLayanan(String biayaLayanan) {
+        this.biayaLayanan = biayaLayanan;
     }
 
     public Integer getTotalPembayaran() {
@@ -253,8 +264,24 @@ public class Order {
         this.orderStatusId = orderStatusId;
     }
 
+    public String getVocher() {
+        return vocher;
+    }
+
+    public void setVocher(String vocher) {
+        this.vocher = vocher;
+    }
+
+    public Vocher getVocherId() {
+        return vocherId;
+    }
+
+    public void setVocherId(Vocher vocherId) {
+        this.vocherId = vocherId;
+    }
+
     @Override
-    public String   toString() {
+    public String toString() {
         return "Order{" +
                 "id=" + id +
                 ", atasNama='" + atasNama + '\'' +
@@ -262,9 +289,9 @@ public class Order {
                 ", alamat='" + alamat + '\'' +
                 ", merek='" + merek + '\'' +
                 ", numberPlat='" + numberPlat + '\'' +
-                ", perLiter=" + perLiter +
-                ", kodeVocher='" + kodeVocher + '\'' +
-                ", totalPembayaran=" + totalPembayaran +
+                ", liter='" + liter + '\'' +
+                ", biayaLayanan='" + biayaLayanan + '\'' +
+                ", totalPembayaran='" + totalPembayaran + '\'' +
                 ", createDate=" + createDate +
                 ", isEmergency=" + isEmergency +
                 ", users='" + users + '\'' +
@@ -273,6 +300,8 @@ public class Order {
                 ", vehicleTypeId=" + vehicleTypeId +
                 ", fuelType='" + fuelType + '\'' +
                 ", fuelTypeId=" + fuelTypeId +
+                ", vocher='" + vocher + '\'' +
+                ", vocherId=" + vocherId +
                 ", orderStatus='" + orderStatus + '\'' +
                 ", orderStatusId=" + orderStatusId +
                 '}';

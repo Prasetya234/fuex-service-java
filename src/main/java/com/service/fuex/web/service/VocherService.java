@@ -14,7 +14,7 @@ public interface VocherService {
 
     Vocher create(Vocher vocher);
 
-    CommonResponse<Vocher> update(Long id, Vocher vocher);
+    CommonResponse<Vocher> update(Long id, Vocher vocher) throws ResourceNotFoundExceotion;
 
     CommonResponse<Vocher> delete(Long id);
 }
