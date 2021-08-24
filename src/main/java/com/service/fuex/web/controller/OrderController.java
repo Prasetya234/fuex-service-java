@@ -34,11 +34,11 @@ public class OrderController {
         }
     }
 
-    @GetMapping("/user")
-    public CommonResponse<Order> getUseId(@RequestParam("userId") String userId) {
+    @GetMapping("/user/{id}")
+    public CommonResponse<List<Order>> getUseId(@PathVariable("id") Long id) {
         try {
-            return commonResponseGenerator.successResponse(orderService.getOrderUserById(userId));
-        }catch(Exception e) {
+            return commonResponseGenerator.successResponse(orderService.nana(id));
+        } catch (Exception e) {
             return commonResponseGenerator.failResponse(e.getMessage());
         }
     }

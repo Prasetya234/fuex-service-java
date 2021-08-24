@@ -9,8 +9,6 @@ import java.util.Map;
 public interface OrderService {
     List<Order> getAll();
 
-    List<Order> getOrderUserById(String user) throws ResourceNotFoundExceotion;
-
     Order create(Order order) throws ResourceNotFoundExceotion;
 
     Order update(Long id, Order order);

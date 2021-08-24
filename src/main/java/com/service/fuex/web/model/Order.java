@@ -53,12 +53,6 @@ public class Order {
     @Column(name = "users")
     private String users;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-    @JoinColumn(name = "user_id")
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    private User userId;
-
     @Column(name = "vehicle_type")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String vehicleType;
@@ -66,6 +60,7 @@ public class Order {
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "vehicle_type_id")
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+//    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private VehicleType vehicleTypeId;
 
     @Column(name = "fuel_type")
@@ -96,21 +91,6 @@ public class Order {
     private OrderStatus orderStatusId;
 
     public Order() {
-    }
-
-    public Order(String atasNama, String noTelpon, String alamat, String merek, String numberPlat, String liter, Boolean isEmergency, String vocher, String users, String vehicleType, String fuelType, String biayaLayanan) {
-        this.atasNama = atasNama;
-        this.noTelpon = noTelpon;
-        this.alamat = alamat;
-        this.merek = merek;
-        this.numberPlat = numberPlat;
-        this.biayaLayanan = biayaLayanan;
-        this.vocher = vocher;
-        this.liter = liter;
-        this.isEmergency = isEmergency;
-        this.users = users;
-        this.vehicleType = vehicleType;
-        this.fuelType = fuelType;
     }
 
     public Long getId() {
@@ -209,14 +189,6 @@ public class Order {
         this.users = users;
     }
 
-    public User getUserId() {
-        return userId;
-    }
-
-    public void setUserId(User userId) {
-        this.userId = userId;
-    }
-
     public String getVehicleType() {
         return vehicleType;
     }
@@ -296,7 +268,6 @@ public class Order {
                 ", createDate=" + createDate +
                 ", isEmergency=" + isEmergency +
                 ", users='" + users + '\'' +
-                ", userId=" + userId +
                 ", vehicleType='" + vehicleType + '\'' +
                 ", vehicleTypeId=" + vehicleTypeId +
                 ", fuelType='" + fuelType + '\'' +

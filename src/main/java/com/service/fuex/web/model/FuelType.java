@@ -60,7 +60,7 @@ public class FuelType {
         this.capacity = capacity;
     }
 
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY, cascade =  CascadeType.MERGE)
     @JoinColumn(name = "vehicle_type_id")
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})

@@ -3,9 +3,9 @@ package com.service.fuex.web.service;
 import com.service.fuex.web.exception.ResourceNotFoundExceotion;
 import com.service.fuex.web.model.Order;
 import com.service.fuex.web.repository.*;
-import com.service.fuex.web.response.CommonResponseGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
+@Transactional
 public class OrderImpl implements OrderService {
 
     @Autowired
@@ -38,13 +39,12 @@ public class OrderImpl implements OrderService {
         return orderRepository.findAll();
     }
 
-    @Override
-    public List<Order> getOrderUserById(String user) throws ResourceNotFoundExceotion {
-        var LMSKA02 = orderRepository.findByUsers(user);
-        if (String.valueOf(LMSKA02).equals("[]")) {
+    public Object nana(Long user) throws ResourceNotFoundExceotion {
+        var orders = orderRepository.findByUsers(String.valueOf(user)).isEmpty();
+        if (orders == true) {
             throw new ResourceNotFoundExceotion("User Belum Melakukan Transaksi");
         }
-        return LMSKA02;
+        return orderRepository.findByUsers(String.valueOf(user));
     }
 
     private Integer transactionConfirmation(Integer biayaLayanan, Integer liter, Integer discount, Integer fuelBuy, String code) throws ResourceNotFoundExceotion {
@@ -111,8 +111,8 @@ public class OrderImpl implements OrderService {
             }
             var AGJ24OT = orderStatusRepository.findById(Long.valueOf(createOrder.getOrderStatus())).orElseThrow(() -> new ResourceNotFoundExceotion("ORDER STATUS ID NOT FOUND"));
             createOrder.setOrderStatusId(AGJ24OT);
+            userRepository.findById(Long.valueOf(order.getUsers())).orElseThrow(() -> new ResourceNotFoundExceotion("USER ID NOT FOUND"));
             createOrder.setUsers(order.getUsers());
-            createOrder.setUserId(userRepository.findById(Long.valueOf(order.getUsers())).orElseThrow(() -> new ResourceNotFoundExceotion("USER ID NOT FOUND")));
             return orderRepository.save(createOrder);
     }
 
