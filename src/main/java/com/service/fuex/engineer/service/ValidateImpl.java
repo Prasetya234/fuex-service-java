@@ -83,15 +83,15 @@ public class ValidateImpl implements ValidateService{
     }
 
     @Override
-    public Object login(String email, String password) {
+    public User login(String email, String password) throws ResourceNotFoundExceotion {
         if(email != null && password != null){
             User checkingEmail = userRepository.findByEmail(email, password);
             if (checkingEmail == null){
-                return  commonResponseGenerator.failResponse( "EMAIL OR PASSWORD NOT FOUND");
+                throw new ResourceNotFoundExceotion("EMAIL OR PASSWORD NOT FOUND");
             }
             return checkingEmail;
             }
-        return  commonResponseGenerator.failResponse("YOU MUST ACCESS ACCORDING TO THE PROCEDURE");
+        throw new ResourceNotFoundExceotion("YOU MUST ACCESS ACCORDING TO THE PROCEDURE");
     }
 
     @Override

@@ -14,7 +14,7 @@ import java.io.IOException;
 public interface ValidateService {
     Object register(User userRequire) throws ResourceNotFoundExceotion, TemplateException, MessagingException, IOException;
 
-    Object login(String email, String password) ;
+    User login(String email, String password) throws ResourceNotFoundExceotion;
 
     CommonResponse<TemporaryOtp> getUserByEmail(String email) throws ResourceNotFoundExceotion, TemplateException, MessagingException, IOException;
 
