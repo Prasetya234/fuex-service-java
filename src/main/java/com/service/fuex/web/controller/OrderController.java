@@ -34,6 +34,15 @@ public class OrderController {
         }
     }
 
+    @GetMapping("/{id}")
+    public CommonResponse<Order> findById(@PathVariable("id") Long id) {
+     try {
+         return commonResponseGenerator.successResponse(orderService.findById(id));
+     } catch (Exception e) {
+         return commonResponseGenerator.failResponse(e.getMessage());
+     }
+    }
+
     @GetMapping("/user/{id}")
     public CommonResponse<List<Order>> getUseId(@PathVariable("id") Long id) {
         try {

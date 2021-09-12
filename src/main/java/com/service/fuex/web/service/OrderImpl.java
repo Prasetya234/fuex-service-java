@@ -121,10 +121,15 @@ public class OrderImpl implements OrderService {
         return null;
     }
 
-    // 4 CANCLE
+    @Override
+    public Order findById(Long id) throws ResourceNotFoundExceotion {
+        return orderRepository.findById(id).orElseThrow(() -> new ResourceNotFoundExceotion("ORDER ID NOT FOUND"));
+    }
+
+    // 4 CANCEL
     // 3 DONE
     // 2 ON THE WAY
-    // 1 waiting for confirmation
+    // 1 WAITING FOR CONFIRMATION
 
     @Override
     public Order statusOtw(Long id) throws ResourceNotFoundExceotion {

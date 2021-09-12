@@ -13,6 +13,8 @@ public interface OrderService {
 
     Order update(Long id, Order order);
 
+    Order findById(Long id) throws ResourceNotFoundExceotion;
+
     Order statusOtw(Long id) throws ResourceNotFoundExceotion;
 
     Order statusDone(Long id) throws  ResourceNotFoundExceotion;
