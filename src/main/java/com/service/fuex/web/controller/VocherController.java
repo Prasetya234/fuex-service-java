@@ -32,6 +32,15 @@ public class VocherController {
         }
     }
 
+    @GetMapping("/{id}")
+    public CommonResponse<Vocher> findById(@PathVariable Long id) {
+        try {
+            return commonResponseGenerator.successResponse(vocher.findById(id));
+        } catch (Exception e) {
+            return commonResponseGenerator.failResponse(e.getMessage());
+        }
+    }
+
     @GetMapping("/code")
     public CommonResponse<Vocher> getCode(@RequestParam(name = "code") String code) {
         try {

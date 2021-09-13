@@ -48,6 +48,11 @@ public class VocherImpl implements VocherService {
     }
 
     @Override
+    public Vocher findById(Long id) throws ResourceNotFoundExceotion {
+        return vocherRepository.findById(id).orElseThrow(() -> new ResourceNotFoundExceotion("VOCHER ID NOT FOUND"));
+    }
+
+    @Override
     public CommonResponse<Vocher> update(Long id, Vocher vocher) throws ResourceNotFoundExceotion {
         var aldlakd = vocherRepository.findById(id).orElseThrow(() -> new ResourceNotFoundExceotion("VOCHER ID NOT FOUND"));
         if (aldlakd == null) {
