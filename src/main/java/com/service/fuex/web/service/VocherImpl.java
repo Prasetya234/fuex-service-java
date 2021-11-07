@@ -25,11 +25,13 @@ public class VocherImpl implements VocherService {
     @Override
     public List<Vocher> getAll() {
         var result = vocherRepository.findAll();
-        for (Vocher b: result) {
-            if (b.getExpiredDate().getTime() < new Date(System.currentTimeMillis()).getTime()) {
-                vocherRepository.deleteById(b.getVocherId());
-            }
-        }
+//        if (!result.isEmpty()) {
+//            result.forEach(b -> {
+//                if (b.getExpiredDate().getTime() < new Date(System.currentTimeMillis()).getTime()) {
+//                    vocherRepository.deleteById(b.getVocherId());
+//                }
+//            });
+//        }
         return result;
     }
 
