@@ -2,4 +2,4 @@
 
 Dalam pengembangan terus menerus
 
-- Going to Jakarta
+- Back to home
